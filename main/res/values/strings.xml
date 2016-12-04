@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">embry.io</string>
+    <string name="First">First</string>
+    <string name="notathing">Nothing to see here, not a thing!</string>
+    <color name="background">#ffffff</color>
+        <string name="action_settings">Settings</string>
+    <string name="submit"> submit </string>
+     <string name="contactname">Contact Name</string>
+     <string name="contactnumber">Contact Number</string>
+      <string name="syncme">Sync selected items</string>
+      <string name="selectall">select all</string>
+      <string name="sync">sync</string>
+      <string name="deselectall">De-select all</string>
+      <string name="username">Username</string>
+     <string name="password">Password</string>
+     <string name="logonbutton">login</string>
+     <string name="rememberpref">Remember logon</string>
+     <string name="submitbutton">Create</string>
+     <string name="resetbutton">Register</string>
+     <string name="emailaddress">Email</string>
+     <color name="embryio">#00AAEF</color>
+     <string name="logon">Register. Logon. Sync.                                 </string>
+     <color name="bg">#003399</color>
+     <color name="titletextcolour">#9f56a6</color>
+     <string name="retrievephonecontacts">Woohoo! No unsynced contacts, go you!</string>
+     <string name="logonstatus"></string>
+     <color name="white">#ffffff</color>
+     <string name="updatesavailable"></string>
+     <string name="unsyncme">unsync selected items</string>
+     <string name="register_status"></string>
+     <string name="progressbar"/>
+         <dimen name="iconSize">48dp</dimen>
+    <dimen name="tvSizeFull">58dp</dimen>
+    <dimen name="tvSizeHalf">29dp</dimen>
+    <dimen name="tvHeight">48dp</dimen>
+    <dimen name="LogonPaddingTop">30dp</dimen>
+    <dimen name="LogonPaddingLeft">80dp</dimen>
+    <dimen name="LogonPaddingRight">80dp</dimen>
+    <dimen name="LogonTVPaddingBottom">30dp</dimen>
+    <dimen name="LogonTextSize">18sp</dimen>
+    <dimen name="LogonButtonWidth">60dp</dimen>
+    <dimen name="LogonButtonHeight">40dp</dimen>
+    <dimen name="LogonPaddingBottom">5dp</dimen>
+    <dimen name="LogonTextWidth">120dp</dimen>
+    <dimen name="LogonTextHeight">50dp</dimen>
+    <string name="dialogText">Mucho gracias</string>
+    <string name="yesButton">Yes</string>
+    <string name="noButton">No</string>
+    <dimen name="dialogTextSize">120dp</dimen>
+    <string name="merge_button">Merge</string>
+    <string name="merge_back">Back</string>
+
+</resources>

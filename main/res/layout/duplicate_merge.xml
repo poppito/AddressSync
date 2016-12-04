@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent"
+    android:orientation="horizontal">
+    <ListView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+    	android:background="@color/embryio"
+        android:id="@+id/mergeContacts">
+    </ListView>
+    <Button
+        android:text="@string/merge_back"
+        android:id="@+id/backButton"
+        android:layout_below="@id/mergeContacts"
+        android:layout_width="100dp"
+        android:layout_height="60dp">
+    </Button>
+    <Button
+        android:id="@+id/mergeButton"
+        android:text="@string/merge_button"
+        android:layout_below="@id/mergeContacts"
+        android:layout_toRightOf="@id/backButton"
+        android:layout_width="100dp"
+        android:layout_height="60dp">
+    </Button>
+</RelativeLayout>

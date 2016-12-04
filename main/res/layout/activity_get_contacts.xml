@@ -1,0 +1,69 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/bg"
+    tools:context=".Second_Tab" >
+
+ <TextView
+    android:layout_width="@dimen/tvSizeHalf"
+    android:layout_height="@dimen/tvHeight"
+   	android:id="@+id/space1">
+   	</TextView>
+    
+<Button
+    android:layout_toRightOf="@id/space1"
+    android:layout_width="@dimen/iconSize"
+    android:layout_height="@dimen/iconSize"
+   	android:background="@drawable/ic_action_select_all"
+    android:id="@+id/selectall">
+</Button>
+
+<TextView
+    android:layout_toRightOf="@id/selectall"
+    android:layout_width="@dimen/tvSizeFull"
+    android:layout_height="@dimen/tvHeight"
+   	android:id="@+id/space2">
+   	</TextView>
+
+<Button
+    android:layout_width="@dimen/iconSize"
+    android:layout_height="@dimen/iconSize"
+    android:background="@drawable/ic_action_undo"
+    android:id="@+id/deselectall"
+    android:layout_toRightOf="@id/space2">
+</Button>
+
+
+<TextView
+    android:layout_toRightOf="@id/deselectall"
+    android:layout_width="@dimen/tvSizeFull"
+    android:layout_height="@dimen/tvHeight"
+   	android:id="@+id/space3">
+   	</TextView>
+
+<Button
+    android:layout_width="@dimen/iconSize"
+    android:layout_height="@dimen/iconSize"
+    android:id="@+id/syncme"
+    android:background="@drawable/ic_action_upload"
+    android:layout_toRightOf="@id/space3">
+</Button>
+
+<TextView
+    android:layout_toRightOf="@id/syncme"
+    android:layout_width="@dimen/tvSizeHalf"
+    android:layout_height="@dimen/tvHeight"
+   	android:id="@+id/space4">
+</TextView>
+
+<ListView 
+        android:id="@+id/listcontacts"
+        android:background="@color/embryio"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_below="@id/space1"
+        android:layout_centerInParent="true">  
+    </ListView>
+    
+</RelativeLayout>

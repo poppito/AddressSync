@@ -1,0 +1,22 @@
+<resources>
+
+    <!--
+         Customize dimensions originally defined in res/values/dimens.xml (such as
+         screen margins) for sw600dp devices (e.g. 7" tablets) here.
+    -->
+       <dimen name="iconSize">64dp</dimen>
+    <dimen name="tvSizeFull">136dp</dimen>
+    <dimen name="tvSizeHalf">68dp</dimen>
+    <dimen name="tvHeight">64dp</dimen>
+    <dimen name="LogonPaddingTop">50dp</dimen>
+    <dimen name="LogonPaddingLeft">210dp</dimen>
+    <dimen name="LogonPaddingRight">210dp</dimen>
+    <dimen name="LogonTVPaddingBottom">50dp</dimen>
+    <dimen name="LogonTextSize">25sp</dimen>
+    <dimen name="LogonButtonWidth">85dp</dimen>
+    <dimen name="LogonButtonHeight">55dp</dimen>
+    <dimen name="LogonPaddingBottom">10dp</dimen>
+    <dimen name="LogonTextWidth">160dp</dimen>
+    <dimen name="LogonTextHeight">80dp</dimen>
+
+</resources>

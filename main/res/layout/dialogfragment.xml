@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <RelativeLayout
+    android:background="@color/embryio"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/tvSizeFull"
+    android:paddingRight="@dimen/tvSizeFull"
+    android:layout_gravity="center">
+    
+     <TextView
+    android:layout_width="@dimen/dialogTextSize"
+    android:textColor="@color/white"
+    android:gravity="center_horizontal"
+    android:layout_height="@dimen/tvHeight"
+    android:text="@string/dialogText"
+   	android:id="@+id/duplicateDialog">
+   	</TextView>
+   	
+     <Button
+     android:layout_width="@dimen/tvSizeFull"
+     android:layout_below="@id/duplicateDialog"
+     android:layout_height="@dimen/tvHeight"
+     android:textColor="@color/white"
+     android:text="@string/yesButton"
+     android:id="@+id/yesButton">
+     </Button>
+     
+     <Button
+     android:layout_width="@dimen/tvSizeFull"
+     android:layout_below="@id/duplicateDialog"
+     android:layout_toRightOf="@id/yesButton"
+     android:layout_height="@dimen/tvHeight"
+     android:textColor="@color/white"
+     android:text="@string/noButton"
+     android:id="@+id/noButton">
+
+     </Button>
+
+</RelativeLayout>
+</LinearLayout>
