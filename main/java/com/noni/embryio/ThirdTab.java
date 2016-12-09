@@ -1,9 +1,20 @@
 package com.noni.embryio;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Collections;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
@@ -18,22 +29,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import com.noni.embryio.FirstTab.HttpMethodTask;
-import android.support.v4.app.Fragment;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.ProgressBar;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class ThirdTab  extends Fragment implements OnClickListener , UpdateableFragment {
 
@@ -108,8 +107,7 @@ public class ThirdTab  extends Fragment implements OnClickListener , UpdateableF
 		 
 				Context context = getActivity().getApplicationContext();
 				HTM1 = new HttpMethodTask1(context);
-				if ((HTM1.getStatus() != AsyncTask.Status.RUNNING))
-				{
+				if ((HTM1.getStatus() != AsyncTask.Status.RUNNING)) {
 					HTM1.execute(testURL1);
 					Log.e(TAG, "HTM1 called from on create view");
 				}

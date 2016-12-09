@@ -1,7 +1,8 @@
 package com.noni.embryio;
+
 import android.app.ActionBar;
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,31 +11,24 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
-import com.dropbox.client2.session.AppKeyPair;
 
 
 public class LogonClass extends FragmentActivity implements OnClickListener {
 
     private SharedPreferences prefs;
-    private String TAG = "LogonClass.java";
+    private final String TAG = this.getClass().getSimpleName();
     private Button logonButton;
-    private TextView logonstatus;
-    private final String LOGON_URL = Constants.SERVERURL + "login_mobile";
-    int TIMEOUT_MILLSEC = 10000;
-    public static MyHttpClient Client = new MyHttpClient(null);
-    private ProgressDialog mProgressDialog;
     private ActionBar actionBar;
-    private final static AppKeyPair emboAppKeys = new AppKeyPair(Constants.API_KEY, Constants.API_KEY);
     private DropboxAPI<AndroidAuthSession> emboDBApi;
+    private AndroidAuthSession newSession = new AndroidAuthSession(Constants.KEY_PAIR);
+    public static MyHttpClient Client = new MyHttpClient(null);
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AndroidAuthSession newSession = new AndroidAuthSession(emboAppKeys);
         emboDBApi = new DropboxAPI<>(newSession);
         actionBar = getActionBar();
         actionBar.hide();
@@ -42,20 +36,13 @@ public class LogonClass extends FragmentActivity implements OnClickListener {
         logonButton = (Button) findViewById(R.id.logonbutton);
         logonButton.setOnClickListener(this);
         prefs = this.getSharedPreferences("prefs", MODE_PRIVATE);
-        SharedPreferences.Editor prefsEditor = prefs.edit();
-        prefsEditor.putString("emboDBAccessToken", "");
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.e(TAG, "On Destroy called");
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onPause() {
-        Log.e(TAG, "On Pause called");
-        super.onPause();
+        if (isDBLinked() == false) {
+            startSessionWhenUnlinked(this);
+        } else {
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+            finish();
+        }
     }
 
     @Override
@@ -64,16 +51,18 @@ public class LogonClass extends FragmentActivity implements OnClickListener {
 
         if (emboDBApi.getSession().authenticationSuccessful()) {
             try {
-                // Required to complete auth, sets the access token on the session
-                emboDBApi.getSession().finishAuthentication();
-
-                String accessToken = emboDBApi.getSession().getOAuth2AccessToken();
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("emboDBAccessToken", accessToken);
-                editor.apply();
-                Log.v("SomeTag", prefs.getString())
+                if (!tokenExists()) {
+                    emboDBApi.getSession().finishAuthentication();
+                    String accessToken = emboDBApi.getSession().getOAuth2AccessToken();
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("emboDBAccessToken", accessToken);
+                    editor.apply();
+                    Intent i = new Intent(this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+                }
             } catch (IllegalStateException e) {
-                Log.i("DbAuthLog", "Error authenticating", e);
+                Log.v(TAG, "Error authenticating", e);
             }
         }
     }
@@ -89,19 +78,13 @@ public class LogonClass extends FragmentActivity implements OnClickListener {
         // TODO Auto-generated method stub
         switch (view.getId()) {
             case R.id.logonbutton: {
-                Log.e(TAG, "logon button pressed");
-                if (!checkIfDBUnlinked()) {
+                Log.v(TAG, "logon button pressed");
+                if (!isDBLinked()) {
                     Log.v(TAG, "Db unlinked eh");
                     startSessionWhenUnlinked(this);
                 } else {
                     //retrieve token and build session
                     Log.v(TAG, "db still linked");
-                    AndroidAuthSession newSession = new AndroidAuthSession(emboAppKeys, prefs.getString("emboDBAccessToken", ""));
-                    //build API
-                    emboDBApi = new DropboxAPI<>(newSession);
-
-                    FileOperations fp = new FileOperations(getApplicationContext(), emboDBApi);
-                    fp.execute("test");
                 }
                 break;
             }
@@ -109,8 +92,6 @@ public class LogonClass extends FragmentActivity implements OnClickListener {
     }
 
     public boolean tokenExists() {
-        Log.v(TAG, "checking that token exists");
-
         if (prefs.getString("emboDBAccessToken", "").equals("")) {
             Log.v(TAG, "Nah token don't exist bruv");
             return false;
@@ -124,10 +105,9 @@ public class LogonClass extends FragmentActivity implements OnClickListener {
         emboDBApi.getSession().startOAuth2Authentication(context);
     }
 
-    public boolean checkIfDBUnlinked() {
-        AndroidAuthSession newSession = new AndroidAuthSession(emboAppKeys, prefs.getString("emboDBAccessToken", ""));
+    public boolean isDBLinked() {
+        AndroidAuthSession newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
         emboDBApi = new DropboxAPI<AndroidAuthSession>(newSession);
-
         if (!tokenExists()) {
             return false;
         }
@@ -144,13 +124,11 @@ public class LogonClass extends FragmentActivity implements OnClickListener {
     }
 
     public class VerifyAuthing extends AsyncTask<Void, Void, String> {
-
         private DropboxAPI<AndroidAuthSession> dbApi;
 
         public VerifyAuthing(DropboxAPI<AndroidAuthSession> dbApi) {
             this.dbApi = dbApi;
         }
-
 
         @Override
         protected String doInBackground(Void... params) {
@@ -161,7 +139,7 @@ public class LogonClass extends FragmentActivity implements OnClickListener {
             } catch (DropboxException e) {
                 e.printStackTrace();
             }
-
+            Log.v(TAG, response.toString() + " is response. We are ok.");
             return response;
         }
     }
