@@ -1,17 +1,20 @@
 package com.noni.embryio;
 
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
     public FragmentManager fm;
     public final String TAG = "TabsPagerAdapter";
+    private ArrayList<String> allPhoneContacts, duplicateContacts, syncedContacts;
     public Fragment FT = new FirstTab();
     public Fragment ST = new SecondTab();
-    public Fragment TT = new ThirdTab();
+    //public Fragment TT = new ThirdTab();
 
 
     public TabsPagerAdapter(FragmentManager fm) {
@@ -32,15 +35,8 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         switch (index) {
             case 0:
                 return FT;
-
             case 1:
-                //		return ST;
-                break;
-
-            case 2:
-                //		return TT;
-                break;
-
+                return ST;
         }
         return null;
     }
@@ -48,7 +44,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return 1;
+        return 2;
     }
 
 

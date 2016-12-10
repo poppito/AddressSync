@@ -7,14 +7,6 @@ import android.util.Log;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.exception.DropboxException;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 
 
 public class DownloadFile extends AsyncTask<String, Void, String> {
@@ -37,7 +29,7 @@ public class DownloadFile extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         String responseRead = "";
         String filename = params[0];
-        try {
+      /*  try {
             //file downloads go here.
         } catch (FileNotFoundException e) {
             Log.v(TAG, "file not found exception thrown");
@@ -46,7 +38,7 @@ public class DownloadFile extends AsyncTask<String, Void, String> {
             Log.v(TAG, "Dropbox exception thrown");
             e.printStackTrace();
         }
-
+*/
         return responseRead;
     }
 

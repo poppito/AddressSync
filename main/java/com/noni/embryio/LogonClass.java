@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.widget.Button;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.exception.DropboxException;
 
 
 public class LogonClass extends FragmentActivity implements OnClickListener {
@@ -48,22 +46,22 @@ public class LogonClass extends FragmentActivity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-
         if (emboDBApi.getSession().authenticationSuccessful()) {
             try {
-                if (!tokenExists()) {
-                    emboDBApi.getSession().finishAuthentication();
-                    String accessToken = emboDBApi.getSession().getOAuth2AccessToken();
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("emboDBAccessToken", accessToken);
-                    editor.apply();
-                    Intent i = new Intent(this, MainActivity.class);
-                    startActivity(i);
-                    finish();
-                }
+                emboDBApi.getSession().finishAuthentication();
+                String accessToken = emboDBApi.getSession().getOAuth2AccessToken();
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("emboDBAccessToken", accessToken);
+                editor.apply();
+                Intent i = new Intent(this, MainActivity.class);
+                startActivity(i);
+                finish();
             } catch (IllegalStateException e) {
                 Log.v(TAG, "Error authenticating", e);
             }
+        }
+        if (!tokenExists()) {
+            startSessionWhenUnlinked(this);
         }
     }
 
@@ -102,46 +100,28 @@ public class LogonClass extends FragmentActivity implements OnClickListener {
     }
 
     public void startSessionWhenUnlinked(Context context) {
+        emboDBApi = new DropboxAPI<AndroidAuthSession>(newSession);
         emboDBApi.getSession().startOAuth2Authentication(context);
     }
 
     public boolean isDBLinked() {
-        AndroidAuthSession newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
-        emboDBApi = new DropboxAPI<AndroidAuthSession>(newSession);
+        String response;
         if (!tokenExists()) {
             return false;
         }
-        return verifyAuth();
-    }
-
-    private boolean verifyAuth() {
-        VerifyAuthing va = new VerifyAuthing(emboDBApi);
-        if (va.execute().equals("")) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public class VerifyAuthing extends AsyncTask<Void, Void, String> {
-        private DropboxAPI<AndroidAuthSession> dbApi;
-
-        public VerifyAuthing(DropboxAPI<AndroidAuthSession> dbApi) {
-            this.dbApi = dbApi;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            String response = "";
-            try {
-                DropboxAPI.Account account = dbApi.accountInfo();
-                response = account.displayName;
-            } catch (DropboxException e) {
-                e.printStackTrace();
+        AndroidAuthSession newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
+        emboDBApi = new DropboxAPI<AndroidAuthSession>(newSession);
+        LogonValidityCheck va = new LogonValidityCheck(emboDBApi, this);
+        try {
+            response = va.execute().get();
+            if (!response.equals("") && (response != null)) {
+                return true;
             }
-            Log.v(TAG, response.toString() + " is response. We are ok.");
-            return response;
         }
+        catch (Exception e) {
+            Log.v(TAG, e.getMessage());
+        }
+        return false;
     }
 }
 

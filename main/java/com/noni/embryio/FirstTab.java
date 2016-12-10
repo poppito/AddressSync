@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -15,30 +16,30 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class FirstTab extends Fragment implements OnClickListener, UpdateableFragment, OnExecutionCompletionListener {
-        private ListView syncStatusList;
-        private final String TAG = this.getClass().getSimpleName();
-        private ArrayList<String> listViewContents = new ArrayList<String>();
-        private JSONArray values = new JSONArray();
-        private ArrayList<String> allPhoneContacts, unsyncedphoneContacts;
-        private Button uselectall, udeselectall, usyncme;
+
+public class FirstTab extends Fragment implements OnClickListener, UpdateableFragment, OnDropboxContactListReceivedListener {
+    private ListView syncStatusList;
+    private final String TAG = this.getClass().getSimpleName();
+    private ArrayList<String> listViewContents = new ArrayList<>();
+    private JSONArray values = new JSONArray();
+    private ArrayList<String> allPhoneContacts, unsyncedphoneContacts;
+    private int totalContactCount;
+    private Button uselectall, udeselectall, usyncme;
+    public OnDropboxContactListReceivedListener mListener;
+    private DropboxContactsList dbContactList;
+    private ArrayAdapter mArrayAdapter;
 
     @Override
     public void update() {
         // TODO Auto-generated method stub
-        if (listViewContents != null) {
-            listViewContents.clear();
+        if (getActivity() != null) {
+            dbContactList = new DropboxContactsList(getActivity());
+            dbContactList.mListener = this;
+            dbContactList.execute();
         }
-        if (unsyncedphoneContacts != null) {
-            unsyncedphoneContacts.clear();
-        }
-        //populate the tab with data here;
-        //This fragment gets all the synced contacts first.
-        //Then it looks at all the phone contacts that are not synced.
-        //If there are any contacts that are not synced it downloads them to the phone to be synced.
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,11 +53,10 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
         uselectall.setOnClickListener(this);
         usyncme.setOnClickListener(this);
         udeselectall.setOnClickListener(this);
-        allPhoneContacts = MainActivity.getPhoneContactNames(getActivity().getContentResolver()); //all contacts except ones marked for deletion
-        Log.v(TAG, "size of all phone contacts is " + allPhoneContacts.size());
-        CreateContactsContent createContactsContent = new CreateContactsContent(getActivity().getApplicationContext(), getActivity().getContentResolver(), allPhoneContacts);
-        createContactsContent.mListener = this;
-        createContactsContent.execute();
+        dbContactList = new DropboxContactsList(getActivity());
+        dbContactList.mListener = this;
+        dbContactList.execute();
+        //	Log.e(TAG, "contacts on phone " + allPhoneContacts.size() + " and contacts on server are " + listViewContents.size());
         return rootView;
     }
 
@@ -104,16 +104,19 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
                     e.printStackTrace();
                 }
         }
+
     }
 
     @Override
-    public void onExecutionCompleted(String[] names) {
-
-        for (String name : names) {
-            File file = new File(getActivity().getApplicationContext().getFilesDir().getPath() + "/" + name);
-            UploadFile uf = new UploadFile(getActivity().getApplicationContext(),name,file);
-            uf.execute();
-        }
+    public void dropboxContactListReceived(ArrayList<String> names) {
+        listViewContents = names;
+        allPhoneContacts = ListOperations.getPhoneContactNames(getActivity().getContentResolver());
+        totalContactCount = allPhoneContacts.size();
+        unsyncedphoneContacts = ListOperations.getUnsyncedList(listViewContents, allPhoneContacts);
+        Collections.sort(unsyncedphoneContacts);
+        ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, unsyncedphoneContacts);
+        syncStatusList.setAdapter(mArrayAdapter);
+        syncStatusList.setChoiceMode(syncStatusList.CHOICE_MODE_MULTIPLE);
     }
 }
 
