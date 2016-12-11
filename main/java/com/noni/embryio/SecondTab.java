@@ -80,7 +80,6 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
                 break;
 
             case (R.id.syncme):
-
                 SparseBooleanArray checked = listContacts.getCheckedItemPositions();
                 for (int i = 0; i < checked.size(); i++) {
                     int key = checked.keyAt(i);

@@ -26,11 +26,9 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
     public OnExecutionCompletionListener mListener = null;
 
     public CreateContactsContent(Context context, ContentResolver cr, ArrayList<String> inputArrayList) {
-
         this.context = context;
         this.cr = cr;
         this.inputArrayList = inputArrayList;
-
     }
 
 
@@ -105,7 +103,6 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
                             String address = addressCursor.getString(addressCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
 
                             if ((address != null) && (type != null)) {
-
                                 addressObj.put(address, type);
                             }
                         }
