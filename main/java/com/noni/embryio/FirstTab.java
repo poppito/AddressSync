@@ -12,10 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -24,7 +20,6 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
     private ListView syncStatusList;
     private final String TAG = this.getClass().getSimpleName();
     private ArrayList<String> listViewContents = new ArrayList<>();
-    private JSONArray values = new JSONArray();
     private ArrayList<String> allPhoneContacts, unsyncedphoneContacts;
     private int totalContactCount;
     private Button uselectall, udeselectall, usyncme;
@@ -83,25 +78,9 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
                     int key = checked.keyAt(i);
                     boolean value = checked.get(key);
                     if (value) {
-                        Log.v(TAG, "adding " + (String) syncStatusList.getItemAtPosition(key));
+                        Log.v(TAG, "adding " + syncStatusList.getItemAtPosition(key));
                         selectedItemList.add((String) syncStatusList.getItemAtPosition(key));
                     }
-                }
-                JSONArray sendArray = new JSONArray();
-                try {
-                    for (int j = 0; j < selectedItemList.size(); j++) {
-                        JSONObject contactName = new JSONObject();
-                        contactName.put("contactName", selectedItemList.get(j));
-                        sendArray.put(contactName);
-                    }
-                    Log.v(TAG, "send array is " + sendArray.toString());
-                    JSONObject sendObj = new JSONObject();
-                    sendObj.put("contacts", sendArray.toString());
-                    sendArray = null;
-                    //Here we put all the contacts that are selected to be downloaded to the phone.
-                    //then we can call insert unsynced contacts;
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
         }
 

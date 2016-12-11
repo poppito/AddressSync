@@ -14,7 +14,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     private ArrayList<String> allPhoneContacts, duplicateContacts, syncedContacts;
     public Fragment FT = new FirstTab();
     public Fragment ST = new SecondTab();
-    //public Fragment TT = new ThirdTab();
+    public Fragment TT = new ThirdTab();
 
 
     public TabsPagerAdapter(FragmentManager fm) {
@@ -37,6 +37,8 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
                 return FT;
             case 1:
                 return ST;
+            case 2:
+                return TT;
         }
         return null;
     }
@@ -44,7 +46,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return 2;
+        return 3;
     }
 
 
