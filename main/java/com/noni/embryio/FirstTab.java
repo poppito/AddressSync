@@ -83,7 +83,7 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
                     }
                 }
                 for (String name : selectedItemList) {
-                    DownloadFile df = new DownloadFile(getActivity(), name, selectedItemList.size(), selectedItemList.indexOf(name) + 1);
+                    DownloadFile df = new DownloadFile(this, getActivity(), name, selectedItemList.size(), selectedItemList.indexOf(name) + 1);
                     df.execute();
                 }
         }

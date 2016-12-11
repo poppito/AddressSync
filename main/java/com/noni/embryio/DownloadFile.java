@@ -23,8 +23,9 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
     private DropboxAPI.DropboxFileInfo mFileInfo;
     private ProgressDialog mProgressDialog;
     private int totalCount, currentCount;
+    private UpdateableFragment frag;
 
-    public DownloadFile(Context c, String fileName, int totalCount, int currentCount) {
+    public DownloadFile(UpdateableFragment frag, Context c, String fileName, int totalCount, int currentCount) {
         this.context = c;
         SharedPreferences prefs = c.getSharedPreferences("prefs", Context.MODE_PRIVATE);
         newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
@@ -32,6 +33,7 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
         this.fileName = fileName;
         this.totalCount = totalCount;
         this.currentCount = currentCount;
+        this.frag = frag;
     }
 
     @Override
@@ -54,6 +56,7 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
+        frag.update();
     }
 
     @Override

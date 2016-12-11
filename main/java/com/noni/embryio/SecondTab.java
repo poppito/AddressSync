@@ -94,7 +94,7 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
                 }
                 for (String name : selectedItemList) {
                     File file = new File(getActivity().getFilesDir().getPath() + "/" + name);
-                    UploadFile uf = new UploadFile(getActivity(),name,file, selectedItemList.size(), selectedItemList.indexOf(name) + 1);
+                    UploadFile uf = new UploadFile(this, getActivity(),name,file, selectedItemList.size(), selectedItemList.indexOf(name) + 1);
                     uf.execute();
                 }
                 selectedItemList.clear();

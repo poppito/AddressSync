@@ -21,9 +21,10 @@ public class DeleteFile extends AsyncTask<Void, Integer, Void> {
     private int totalCount;
     private int currentCount;
     private ProgressDialog mProgressDialog;
+    private UpdateableFragment frag;
 
 
-    public DeleteFile(Context c, String fileName, int totalCount, int currentCount) {
+    public DeleteFile(UpdateableFragment frag, Context c, String fileName, int totalCount, int currentCount) {
         this.context = c;
         SharedPreferences prefs = c.getSharedPreferences("prefs", Context.MODE_PRIVATE);
         newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
@@ -31,6 +32,7 @@ public class DeleteFile extends AsyncTask<Void, Integer, Void> {
         this.fileName = fileName;
         this.totalCount = totalCount;
         this.currentCount = currentCount;
+        this.frag = frag;
     }
 
     @Override
@@ -63,6 +65,7 @@ public class DeleteFile extends AsyncTask<Void, Integer, Void> {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
+        frag.update();
     }
 
 

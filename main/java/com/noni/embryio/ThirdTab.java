@@ -72,7 +72,7 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
                     }
                 }
                 for (String name : removePhoneContacts) {
-                    DeleteFile df = new DeleteFile(getActivity(), name, removePhoneContacts.size(), removePhoneContacts.indexOf(name) + 1);
+                    DeleteFile df = new DeleteFile(this, getActivity(), name, removePhoneContacts.size(), removePhoneContacts.indexOf(name) + 1);
                     df.execute();
                 }
                 break;

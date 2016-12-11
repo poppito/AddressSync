@@ -26,6 +26,7 @@ public class UploadFile extends AsyncTask<Void, Integer, String> {
     private int totalCount;
     private int currentCount;
     private ProgressDialog mProgressDialog;
+    private UpdateableFragment frag;
 
     @Override
     protected void onPreExecute() {
@@ -40,7 +41,7 @@ public class UploadFile extends AsyncTask<Void, Integer, String> {
     }
 
 
-    public UploadFile(Context c, String fileName, File file, int totalCount, int currentCount) {
+    public UploadFile(UpdateableFragment frag, Context c, String fileName, File file, int totalCount, int currentCount) {
         this.context = c;
         SharedPreferences prefs = c.getSharedPreferences("prefs", Context.MODE_PRIVATE);
         newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
@@ -49,6 +50,7 @@ public class UploadFile extends AsyncTask<Void, Integer, String> {
         this.file = file;
         this.totalCount = totalCount;
         this.currentCount = currentCount;
+        this.frag = frag;
     }
 
     @Override
@@ -84,5 +86,6 @@ public class UploadFile extends AsyncTask<Void, Integer, String> {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
+        frag.update();
     }
 }
