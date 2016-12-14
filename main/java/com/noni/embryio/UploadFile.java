@@ -13,6 +13,7 @@ import com.dropbox.client2.exception.DropboxException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 
 public class UploadFile extends AsyncTask<Void, Integer, String> {
@@ -21,8 +22,7 @@ public class UploadFile extends AsyncTask<Void, Integer, String> {
     public Context context;
     AndroidAuthSession newSession;
     private DropboxAPI emboDBApi;
-    private String fileName;
-    private File file;
+    private ArrayList<String> fileNames;
     private int totalCount;
     private int currentCount;
     private ProgressDialog mProgressDialog;
@@ -41,27 +41,27 @@ public class UploadFile extends AsyncTask<Void, Integer, String> {
     }
 
 
-    public UploadFile(UpdateableFragment frag, Context c, String fileName, File file, int totalCount, int currentCount) {
+    public UploadFile(UpdateableFragment frag, Context c, ArrayList<String> fileNames) {
         this.context = c;
         SharedPreferences prefs = c.getSharedPreferences("prefs", Context.MODE_PRIVATE);
         newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
         emboDBApi = new DropboxAPI<>(newSession);
-        this.fileName = fileName;
-        this.file = file;
-        this.totalCount = totalCount;
-        this.currentCount = currentCount;
+        this.fileNames = fileNames;
         this.frag = frag;
+        totalCount = fileNames.size();
     }
 
     @Override
     protected String doInBackground(Void... params) {
         try {
-            publishProgress(totalCount, currentCount);
-            FileInputStream inputStream = new FileInputStream(file);
-            DropboxAPI.Entry response = emboDBApi.putFile(fileName, inputStream, file.length(), null, null);
-            Log.v(TAG, "The uploaded file's revision number is " + response.rev.toString());
-            publishProgress(totalCount, currentCount);
-            return response.rev.toString();
+            for (String name : fileNames) {
+                currentCount = fileNames.indexOf(name) + 1;
+                publishProgress(totalCount, currentCount);
+                File file = new File(context.getFilesDir() + "/" + name);
+                FileInputStream inputStream = new FileInputStream(file);
+                DropboxAPI.Entry response = emboDBApi.putFile(name, inputStream, file.length(), null, null);
+                Log.v(TAG, "The uploaded file's revision number is " + response.rev.toString());
+            }
 
         } catch (FileNotFoundException e) {
             Log.v(TAG, "file not found exception thrown");

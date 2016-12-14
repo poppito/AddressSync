@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -21,13 +20,13 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
     private static String TAG = "SecondTab";
     private Button selectall, deselectall, syncme;
     private ListView listContacts;
-    private ArrayList<String> selectedItemList = new ArrayList<String>();
-    private ArrayList<String> displayList = new ArrayList<String>();
-    private ArrayList<String> allPhoneContacts = new ArrayList<String>();
-    private ArrayList<String> syncedContacts = new ArrayList<String>();
+    private ArrayList<String> selectedItemList = new ArrayList<>();
+    private ArrayList<String> displayList = new ArrayList<>();
+    private ArrayList<String> allPhoneContacts = new ArrayList<>();
+    private ArrayList<String> syncedContacts = new ArrayList<>();
     private final static int TIMEOUT_MILLSEC = 1000;
     private DropboxContactsList dbContactList;
-    private ArrayAdapter mArrayAdapter;
+    private ArrayAdapter<String> mArrayAdapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +60,7 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
         dbContactList = new DropboxContactsList(getActivity());
         dbContactList.mListener = this;
         dbContactList.execute();
+        selectedItemList.clear();
     }
 
 
@@ -68,36 +68,19 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
     public void onClick(View v) {
         // TODO Auto-generated method stub
         switch (v.getId()) {
-            case (R.id.selectall):
-                for (int i = 0; i < listContacts.getCount(); i++) {
-                    listContacts.setItemChecked(i, true);
-                }
-                break;
             case (R.id.deselectall):
                 for (int i = 0; i < listContacts.getCount(); i++) {
                     listContacts.setItemChecked(i, false);
                 }
                 break;
-
+            case (R.id.selectall):
+                for (int i = 0; i < listContacts.getCount(); i++) {
+                    listContacts.setItemChecked(i, true);
+                }
+                break;
             case (R.id.syncme):
-                SparseBooleanArray checked = listContacts.getCheckedItemPositions();
-                for (int i = 0; i < checked.size(); i++) {
-                    int key = checked.keyAt(i);
-                    boolean value = checked.get(key);
-                    if (value) {
-                        if (selectedItemList.contains(listContacts.getItemAtPosition(key))) {
-                            Log.v(TAG, listContacts.getItemAtPosition(key).toString() + " is a duplicate!!!!");
-
-                        }
-                        selectedItemList.add((String) listContacts.getItemAtPosition(key));
-                    }
-                }
-                for (String name : selectedItemList) {
-                    File file = new File(getActivity().getFilesDir().getPath() + "/" + name);
-                    UploadFile uf = new UploadFile(this, getActivity(),name,file, selectedItemList.size(), selectedItemList.indexOf(name) + 1);
-                    uf.execute();
-                }
-                selectedItemList.clear();
+                runUploadsForSelectedItems(selectedItemList, listContacts);
+                break;
         }
     }
 
@@ -106,9 +89,24 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
         syncedContacts = names;
         allPhoneContacts = ListOperations.getPhoneContactNames(getActivity().getContentResolver()); //gets all contacts except ones marked for deletion
         displayList = ListOperations.getSyncedList(syncedContacts, allPhoneContacts); //compares synced contacts with unsynced ones to only show unsynced contacts
-        mArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, displayList);
+        mArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, displayList);
         Collections.sort(displayList);
         listContacts.setAdapter(mArrayAdapter);
         listContacts.setChoiceMode(listContacts.CHOICE_MODE_MULTIPLE);
+    }
+
+
+    private void runUploadsForSelectedItems(ArrayList<String> selectedItemList, ListView listContacts) {
+       SparseBooleanArray mChecked = listContacts.getCheckedItemPositions();
+        for (int i = 0; i < mChecked.size(); i++) {
+            int key = mChecked.keyAt(i);
+            boolean value = mChecked.get(key);
+            if (value) {
+                selectedItemList.add((String) listContacts.getItemAtPosition(key));
+                Log.v(TAG, String.valueOf(listContacts.getItemAtPosition(key)));
+            }
+        }
+        UploadFile uf = new UploadFile(this, getActivity(),selectedItemList);
+        uf.execute();
     }
 }
