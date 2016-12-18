@@ -15,7 +15,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class SecondTab extends Fragment implements OnClickListener, UpdateableFragment, OnDropboxContactListReceivedListener {
+public class SecondTab extends Fragment implements OnClickListener, UpdateableFragment, OnDropboxContactListReceivedListener, OnExecutionCompletionListener {
 
     private static String TAG = "SecondTab";
     private Button selectall, deselectall, syncme;
@@ -79,7 +79,7 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
                 }
                 break;
             case (R.id.syncme):
-                runUploadsForSelectedItems(selectedItemList, listContacts);
+                createContactsContentForSelected(selectedItemList, listContacts);
                 break;
         }
     }
@@ -89,14 +89,14 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
         syncedContacts = names;
         allPhoneContacts = ListOperations.getPhoneContactNames(getActivity().getContentResolver()); //gets all contacts except ones marked for deletion
         displayList = ListOperations.getSyncedList(syncedContacts, allPhoneContacts); //compares synced contacts with unsynced ones to only show unsynced contacts
-        mArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, displayList);
+        mArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, displayList);
         Collections.sort(displayList);
         listContacts.setAdapter(mArrayAdapter);
         listContacts.setChoiceMode(listContacts.CHOICE_MODE_MULTIPLE);
     }
 
 
-    private void runUploadsForSelectedItems(ArrayList<String> selectedItemList, ListView listContacts) {
+    private void createContactsContentForSelected(ArrayList<String> selectedItemList, ListView listContacts) {
        SparseBooleanArray mChecked = listContacts.getCheckedItemPositions();
         for (int i = 0; i < mChecked.size(); i++) {
             int key = mChecked.keyAt(i);
@@ -106,7 +106,19 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
                 Log.v(TAG, String.valueOf(listContacts.getItemAtPosition(key)));
             }
         }
-        UploadFile uf = new UploadFile(this, getActivity(),selectedItemList);
+        CreateContactsContent createContactsContent = new CreateContactsContent(getActivity(), getActivity().getContentResolver(), selectedItemList);
+        createContactsContent.mListener = this;
+        createContactsContent.execute();
+    }
+
+    @Override
+    public void onExecutionCompleted(String[] names) {
+        ArrayList<String> namesList = new ArrayList<>();
+        for (String name : names) {
+            Log.v(TAG, name + " is name");
+            namesList.add(name);
+        }
+        UploadFile uf = new UploadFile(this, getActivity(), namesList);
         uf.execute();
     }
 }
