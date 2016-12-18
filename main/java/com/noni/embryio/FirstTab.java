@@ -1,5 +1,4 @@
 package com.noni.embryio;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -72,20 +71,7 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
                 break;
             case R.id.usyncme:
                 Log.v(TAG, "sync me button pressed!");
-                ArrayList<String> selectedItemList = new ArrayList<>();
-                SparseBooleanArray checked = syncStatusList.getCheckedItemPositions();
-                for (int i = 0; i < checked.size(); i++) {
-                    int key = checked.keyAt(i);
-                    boolean value = checked.get(key);
-                    if (value) {
-                        Log.v(TAG, "adding " + syncStatusList.getItemAtPosition(key));
-                        selectedItemList.add((String) syncStatusList.getItemAtPosition(key));
-                    }
-                }
-                for (String name : selectedItemList) {
-                    DownloadFile df = new DownloadFile(this, getActivity(), name, selectedItemList.size(), selectedItemList.indexOf(name) + 1);
-                    df.execute();
-                }
+                runDownloadsForSelectedItems(syncStatusList);
         }
 
     }
@@ -100,6 +86,22 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
         ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, unsyncedphoneContacts);
         syncStatusList.setAdapter(mArrayAdapter);
         syncStatusList.setChoiceMode(syncStatusList.CHOICE_MODE_MULTIPLE);
+    }
+
+
+    private void runDownloadsForSelectedItems(ListView listView) {
+        ArrayList<String> selectedItemList = new ArrayList<>();
+        SparseBooleanArray checked = listView.getCheckedItemPositions();
+        for (int i = 0; i < checked.size(); i++) {
+            int key = checked.keyAt(i);
+            boolean value = checked.get(key);
+            if (value) {
+                Log.v(TAG, "adding " + listView.getItemAtPosition(key));
+                selectedItemList.add((String) listView.getItemAtPosition(key));
+            }
+        }
+        DownloadFile df = new DownloadFile(this, getActivity(), selectedItemList);
+        df.execute();
     }
 }
 

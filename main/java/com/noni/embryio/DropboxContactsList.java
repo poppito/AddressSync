@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
+
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
-
 
 import java.util.ArrayList;
 
@@ -28,7 +28,6 @@ public class DropboxContactsList extends AsyncTask<Void, Void, ArrayList<String>
         emboDBApi = new DropboxAPI<>(newSession);
         this.context = context;
     }
-
 
     @Override
     protected void onPreExecute() {

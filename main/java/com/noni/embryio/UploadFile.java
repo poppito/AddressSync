@@ -60,6 +60,9 @@ public class UploadFile extends AsyncTask<Void, Integer, String> {
                 File file = new File(context.getFilesDir() + "/" + name);
                 FileInputStream inputStream = new FileInputStream(file);
                 DropboxAPI.Entry response = emboDBApi.putFile(name, inputStream, file.length(), null, null);
+                if (response != null) {
+                    file.delete();
+                }
                 Log.v(TAG, "The uploaded file's revision number is " + response.rev.toString());
             }
 
