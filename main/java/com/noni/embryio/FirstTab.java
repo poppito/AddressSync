@@ -86,6 +86,16 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getActivity() != null) {
+            dbContactList = new DropboxContactsList(getActivity());
+            dbContactList.mListener = this;
+            dbContactList.execute();
+        }
+    }
+
     private void runDownloadsForSelectedItems(ListView listView) {
         ArrayList<String> selectedItemList = new ArrayList<>();
         SparseBooleanArray checked = listView.getCheckedItemPositions();

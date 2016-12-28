@@ -149,7 +149,7 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
 
                             if ((websiteVal != null) && (MIMETYPE_URL.equals("vnd.android.cursor.item/website"))) {
                                 websiteObj.put(websiteVal, "website");
-                                detailType.put("website", websiteVal);
+                                detailType.put("website", websiteObj);
                             }
 
 

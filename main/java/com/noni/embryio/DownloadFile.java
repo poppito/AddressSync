@@ -223,6 +223,7 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
                 }
             }
 
+
             if (!obj.getString("website").equals("")) {
                 String websiteString = obj.getString("website");
                 JSONObject website = (JSONObject) new JSONTokener(websiteString).nextValue();

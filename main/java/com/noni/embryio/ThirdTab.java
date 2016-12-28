@@ -49,6 +49,16 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
 
 
     @Override
+    public void onResume() {
+        super.onResume();
+        listViewContents.clear();
+        removePhoneContacts.clear();
+        dbContactList = new DropboxContactsList(getActivity());
+        dbContactList.mListener = this;
+        dbContactList.execute();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.eselectall:

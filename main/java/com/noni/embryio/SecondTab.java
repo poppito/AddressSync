@@ -63,6 +63,14 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
         selectedItemList.clear();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        dbContactList = new DropboxContactsList(getActivity());
+        dbContactList.mListener = this;
+        dbContactList.execute();
+        selectedItemList.clear();
+    }
 
     @Override
     public void onClick(View v) {
