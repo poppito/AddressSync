@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,16 +62,16 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
                     JSONObject addressObj = new JSONObject();
                     JSONObject websiteObj = new JSONObject();
                     JSONObject noteObj = new JSONObject();
+                    JSONObject nickObj = new JSONObject();
 
-                    detailType.put("Address", blank);
+                    detailType.put("address", blank);
                     detailType.put("phoneNumbers", blank);
                     detailType.put("emailAddresses", blank);
-                    detailType.put("Organisation", blank);
-                    detailType.put("IMs", blank);
+                    detailType.put("organisation", blank);
+                    detailType.put("ims", blank);
                     detailType.put("website", blank);
-                    detailType.put("Note", blank);
-
-
+                    detailType.put("note", blank);
+                    detailType.put("nickname", blank);
 
 
                     if (inputArrayList.contains(name)) {
@@ -114,7 +115,7 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
 
                             if ((address != null) && (type != null)) {
                                 addressObj.put(address, type);
-                                detailType.put("Address", addressObj);
+                                detailType.put("address", addressObj);
                             }
 
                         }
@@ -132,7 +133,7 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
 
                             if ((organisation != null) && (title != null) && (MIMETYPE_ORG.equals("vnd.android.cursor.item/organization"))) {
                                 orgObj.put(organisation, title);
-                                detailType.put("Organisation", orgObj);
+                                detailType.put("organisation", orgObj);
                             }
 
                             String IMtype = genericCursor.getString(genericCursor.getColumnIndex(ContactsContract.CommonDataKinds.Im.PROTOCOL));
@@ -141,7 +142,7 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
 
                             if ((IMtype != null) && (IMvalue != null) && (MIMETYPE_IM.equals("vnd.android.cursor.item/im"))) {
                                 IMobj.put(IMvalue, IMtype);
-                                detailType.put("IMs", IMobj);
+                                detailType.put("ims", IMobj);
                             }
 
                             String websiteVal = genericCursor.getString(genericCursor.getColumnIndex(ContactsContract.CommonDataKinds.Website.URL));
@@ -157,12 +158,21 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
                             String MIMETYPE_NOTE = genericCursor.getString(genericCursor.getColumnIndex(ContactsContract.CommonDataKinds.Note.MIMETYPE));
 
                             if ((notesVal != null) && (MIMETYPE_NOTE.equals("vnd.android.cursor.item/note"))) {
-                                noteObj.put(notesVal, "Note");
-                                detailType.put("Note", noteObj);
+                                noteObj.put(notesVal, "note");
+                                detailType.put("note", noteObj);
                             }
+
+                            String nickVal = genericCursor.getString(genericCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Nickname.NAME));
+                            String MIMETYPE_NICK = genericCursor.getString(genericCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Nickname.MIMETYPE));
+
+                            if ((nickVal != null) && (MIMETYPE_NICK.equals("vnd.android.cursor.item/nickname"))) {
+                                Log.v(TAG, "nickname is " + nickVal);
+                                nickObj.put(nickVal, "nickname");
+                                detailType.put("nickname", nickObj);
+                            }
+
+
                         }
-
-
                         detailType.put("accountName", accountName);
                         detailType.put("accountType", accountType);
                         detailType.put("contactName", name);

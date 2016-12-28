@@ -152,8 +152,8 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
 
             }
 
-            if (!obj.getString("IMs").equals("")) {
-                String IMs = obj.getString("IMs");
+            if (!obj.getString("ims").equals("")) {
+                String IMs = obj.getString("ims");
                 JSONObject iM = (JSONObject) new JSONTokener(IMs).nextValue();
                 Iterator iter = iM.keys();
 
@@ -177,8 +177,8 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
             }
 
 
-            if (!obj.getString("Note").equals("")) {
-                String notes = obj.getString("Note");
+            if (!obj.getString("note").equals("")) {
+                String notes = obj.getString("note");
                 JSONObject Notes = (JSONObject) new JSONTokener(notes).nextValue();
                 Iterator iter = Notes.keys();
 
@@ -200,8 +200,8 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
             }
 
 
-            if (!obj.getString("Address").equals("")) {
-                String address = obj.getString("Address");
+            if (!obj.getString("address").equals("")) {
+                String address = obj.getString("address");
                 JSONObject Address = (JSONObject) new JSONTokener(address).nextValue();
                 Iterator iter = Address.keys();
 
@@ -222,8 +222,6 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
                     Ops.add(op.build());
                 }
             }
-
-
             if (!obj.getString("website").equals("")) {
                 String websiteString = obj.getString("website");
                 JSONObject website = (JSONObject) new JSONTokener(websiteString).nextValue();
@@ -246,8 +244,9 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
                 }
             }
 
-            if (!obj.getString("Organisation").equals("")) {
-                String organisationString = obj.getString("Organisation");
+
+            if (!obj.getString("organisation").equals("")) {
+                String organisationString = obj.getString("organisation");
                 JSONObject org = (JSONObject) new JSONTokener(organisationString).nextValue();
                 Iterator iter = org.keys();
 
@@ -264,6 +263,26 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
                             .withValue(ContactsContract.CommonDataKinds.Organization.COMPANY, value)
                             .withValue(ContactsContract.CommonDataKinds.Organization.TITLE, key);
 
+
+                    Ops.add(op.build());
+                }
+            }
+
+            if (!obj.getString("nickname").equals("")) {
+                String nicknameString = obj.getString("nickname");
+                JSONObject nicknames = (JSONObject) new JSONTokener(nicknameString).nextValue();
+                Iterator iter = nicknames.keys();
+
+                while (iter.hasNext()) {
+                    String key = (String) iter.next();
+                    String value = nicknames.getString(key);
+
+                    Log.v(TAG, "nickname is " + key);
+
+                    op = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                            .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE)
+                            .withValue(ContactsContract.CommonDataKinds.Nickname.NAME, key);
 
                     Ops.add(op.build());
                 }
