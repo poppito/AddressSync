@@ -15,7 +15,7 @@
       <string name="deselectall">De-select all</string>
       <string name="username">Username</string>
      <string name="password">Password</string>
-     <string name="logonbutton">login</string>
+     <string name="logonbutton">Login with Dropbox</string>
      <string name="rememberpref">Remember logon</string>
      <string name="submitbutton">Create</string>
      <string name="resetbutton">Register</string>

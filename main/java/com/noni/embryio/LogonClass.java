@@ -19,49 +19,44 @@ public class LogonClass extends FragmentActivity implements OnClickListener {
 
     private SharedPreferences prefs;
     private final String TAG = this.getClass().getSimpleName();
-    private Button logonButton;
-    private ActionBar actionBar;
     private DropboxAPI<AndroidAuthSession> emboDBApi;
     private AndroidAuthSession newSession = new AndroidAuthSession(Constants.KEY_PAIR);
-    public static MyHttpClient Client = new MyHttpClient(null);
+    private Boolean buttonPressed = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         emboDBApi = new DropboxAPI<>(newSession);
-        actionBar = getActionBar();
+        ActionBar actionBar = getActionBar();
         actionBar.hide();
         setContentView(R.layout.logonview);
-        logonButton = (Button) findViewById(R.id.logonbutton);
+        Button logonButton = (Button) findViewById(R.id.logonbutton);
         logonButton.setOnClickListener(this);
         prefs = this.getSharedPreferences("prefs", MODE_PRIVATE);
-        if (isDBLinked() == false) {
-            startSessionWhenUnlinked(this);
-        } else {
-            Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
-            finish();
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (emboDBApi.getSession().authenticationSuccessful()) {
-            try {
-                emboDBApi.getSession().finishAuthentication();
-                String accessToken = emboDBApi.getSession().getOAuth2AccessToken();
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("emboDBAccessToken", accessToken);
-                editor.apply();
-                Intent i = new Intent(this, MainActivity.class);
-                startActivity(i);
-                finish();
-            } catch (IllegalStateException e) {
-                Log.v(TAG, "Error authenticating", e);
+        Log.v(TAG, "onresume called");
+        if (buttonPressed) {
+            buttonPressed = false;
+            if (emboDBApi.getSession().authenticationSuccessful()) {
+                try {
+                    emboDBApi.getSession().finishAuthentication();
+                    String accessToken = emboDBApi.getSession().getOAuth2AccessToken();
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("emboDBAccessToken", accessToken);
+                    editor.apply();
+                    Intent i = new Intent(this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+                } catch (IllegalStateException e) {
+                    Log.v(TAG, "Error authenticating", e);
+                }
             }
-        }
-        if (!tokenExists()) {
-            startSessionWhenUnlinked(this);
+            if (!tokenExists()) {
+                startSessionWhenUnlinked(this);
+            }
         }
     }
 
@@ -77,14 +72,17 @@ public class LogonClass extends FragmentActivity implements OnClickListener {
         switch (view.getId()) {
             case R.id.logonbutton: {
                 Log.v(TAG, "logon button pressed");
+                buttonPressed = true;
                 if (!isDBLinked()) {
                     Log.v(TAG, "Db unlinked eh");
                     startSessionWhenUnlinked(this);
                 } else {
                     //retrieve token and build session
+                    Intent i = new Intent(this, MainActivity.class);
+                    startActivity(i);
+                    finish();
                     Log.v(TAG, "db still linked");
                 }
-                break;
             }
         }
     }
