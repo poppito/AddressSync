@@ -9,8 +9,6 @@
     <dimen name="tvSizeHalf">68dp</dimen>
     <dimen name="tvHeight">64dp</dimen>
     <dimen name="LogonPaddingTop">50dp</dimen>
-    <dimen name="LogonPaddingLeft">210dp</dimen>
-    <dimen name="LogonPaddingRight">210dp</dimen>
     <dimen name="LogonTVPaddingBottom">50dp</dimen>
     <dimen name="LogonTextSize">25sp</dimen>
     <dimen name="LogonButtonWidth">85dp</dimen>

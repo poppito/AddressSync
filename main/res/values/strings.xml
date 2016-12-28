@@ -51,5 +51,7 @@
     <dimen name="dialogTextSize">120dp</dimen>
     <string name="merge_button">Merge</string>
     <string name="merge_back">Back</string>
+    <string name="whyDropbox">Why Dropbox?</string>
+    <string name="licenseTerms">By logging in, you agree to the License Terms.</string>
 
 </resources>
