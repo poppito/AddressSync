@@ -63,6 +63,15 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
                     JSONObject noteObj = new JSONObject();
 
                     detailType.put("Address", blank);
+                    detailType.put("phoneNumbers", blank);
+                    detailType.put("emailAddresses", blank);
+                    detailType.put("Organisation", blank);
+                    detailType.put("IMs", blank);
+                    detailType.put("website", blank);
+                    detailType.put("Note", blank);
+
+
+
 
                     if (inputArrayList.contains(name)) {
                         countingContacts++;
@@ -81,8 +90,6 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
                             if ((num != null) && (numType != null)) {
                                 numObj.put(num, numType);
                                 detailType.put("phoneNumbers", numObj.toString());
-                            } else {
-                                detailType.put("phoneNumbers", blank);
                             }
                         }
                         Cursor emailCursor = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", filter, null);
@@ -94,8 +101,6 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
                             if ((email != null) && (emailType != null)) {
                                 emObj.put(email, emailType);
                                 detailType.put("emailAddresses", emObj.toString());
-                            } else {
-                                detailType.put("emailAddresses", blank);
                             }
                         }
 
@@ -128,8 +133,6 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
                             if ((organisation != null) && (title != null) && (MIMETYPE_ORG.equals("vnd.android.cursor.item/organization"))) {
                                 orgObj.put(organisation, title);
                                 detailType.put("Organisation", orgObj);
-                            } else {
-                                detailType.put("Organisation", blank);
                             }
 
                             String IMtype = genericCursor.getString(genericCursor.getColumnIndex(ContactsContract.CommonDataKinds.Im.PROTOCOL));
@@ -139,8 +142,6 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
                             if ((IMtype != null) && (IMvalue != null) && (MIMETYPE_IM.equals("vnd.android.cursor.item/im"))) {
                                 IMobj.put(IMvalue, IMtype);
                                 detailType.put("IMs", IMobj);
-                            } else {
-                                detailType.put("IMs", blank);
                             }
 
                             String websiteVal = genericCursor.getString(genericCursor.getColumnIndex(ContactsContract.CommonDataKinds.Website.URL));
@@ -149,8 +150,6 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
                             if ((websiteVal != null) && (MIMETYPE_URL.equals("vnd.android.cursor.item/website"))) {
                                 websiteObj.put(websiteVal, "website");
                                 detailType.put("website", websiteVal);
-                            } else {
-                                detailType.put("website", blank);
                             }
 
 
@@ -160,8 +159,6 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
                             if ((notesVal != null) && (MIMETYPE_NOTE.equals("vnd.android.cursor.item/note"))) {
                                 noteObj.put(notesVal, "Note");
                                 detailType.put("Note", noteObj);
-                            } else {
-                                detailType.put("Note", blank);
                             }
                         }
 
