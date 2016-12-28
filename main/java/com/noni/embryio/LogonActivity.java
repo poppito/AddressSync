@@ -27,12 +27,12 @@ public class LogonActivity extends FragmentActivity implements OnClickListener {
     private DropboxAPI<AndroidAuthSession> emboDBApi;
     private AndroidAuthSession newSession = new AndroidAuthSession(Constants.KEY_PAIR);
     private Boolean buttonPressed = false;
-    private final String termsURL = "https://poppito.github.io/terms";
-    private final String whyDropboxURL = "https://poppito.github.io/whyDropbox";
-    private final String licenseSpan = "License Terms";
 
 
     protected void onCreate(Bundle savedInstanceState) {
+        final String termsURL = "https://poppito.github.io/terms";
+        final String whyDropboxURL = "https://poppito.github.io/whyDropbox";
+        final String licenseSpan = "License Terms";
         super.onCreate(savedInstanceState);
         emboDBApi = new DropboxAPI<>(newSession);
         setContentView(R.layout.logonview);
@@ -107,7 +107,6 @@ public class LogonActivity extends FragmentActivity implements OnClickListener {
 
     @Override
     public void onClick(View view) {
-        // TODO Auto-generated method stub
         switch (view.getId()) {
             case R.id.logonbutton: {
                 Log.v(TAG, "logon button pressed");
@@ -137,7 +136,7 @@ public class LogonActivity extends FragmentActivity implements OnClickListener {
     }
 
     public void startSessionWhenUnlinked(Context context) {
-        emboDBApi = new DropboxAPI<AndroidAuthSession>(newSession);
+        emboDBApi = new DropboxAPI<>(newSession);
         emboDBApi.getSession().startOAuth2Authentication(context);
     }
 
@@ -147,11 +146,11 @@ public class LogonActivity extends FragmentActivity implements OnClickListener {
             return false;
         }
         AndroidAuthSession newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
-        emboDBApi = new DropboxAPI<AndroidAuthSession>(newSession);
+        emboDBApi = new DropboxAPI<>(newSession);
         LogonValidityCheck va = new LogonValidityCheck(emboDBApi, this);
         try {
             response = va.execute().get();
-            if (!response.equals("") && (response != null)) {
+            if ((response != null) && !response.equals("")) {
                 return true;
             }
         }
