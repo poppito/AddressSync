@@ -36,8 +36,9 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
     protected String[] doInBackground(Void... params) {
         try {
 
-            String accountName = null;
-            String accountType = null;
+            String accountName = "";
+            String accountType = "";
+            String blank = "";
 
             String[] proj = {ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY, ContactsContract.RawContacts.CONTACT_ID, ContactsContract.RawContacts.ACCOUNT_NAME, ContactsContract.RawContacts.ACCOUNT_TYPE, ContactsContract.RawContacts.DELETED};
             Cursor C = cr.query(ContactsContract.RawContacts.CONTENT_URI, proj, null, null, null);
@@ -61,6 +62,8 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
                     JSONObject websiteObj = new JSONObject();
                     JSONObject noteObj = new JSONObject();
 
+                    detailType.put("Address", blank);
+
                     if (inputArrayList.contains(name)) {
                         countingContacts++;
                         String contactID = C.getString(C.getColumnIndex(ContactsContract.RawContacts.CONTACT_ID));
@@ -77,23 +80,25 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
                             String num = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                             if ((num != null) && (numType != null)) {
                                 numObj.put(num, numType);
+                                detailType.put("phoneNumbers", numObj.toString());
+                            } else {
+                                detailType.put("phoneNumbers", blank);
                             }
                         }
-                        detailType.put("phoneNumbers", numObj.toString());
                         Cursor emailCursor = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", filter, null);
 
                         while (emailCursor.moveToNext()) {
-                            int type = emailCursor.getInt(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
-                            String emailType = "" + type;
+                            String emailType = emailCursor.getString(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
                             String email = emailCursor.getString(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
 
                             if ((email != null) && (emailType != null)) {
-
                                 emObj.put(email, emailType);
+                                detailType.put("emailAddresses", emObj.toString());
+                            } else {
+                                detailType.put("emailAddresses", blank);
                             }
                         }
 
-                        detailType.put("emailAddresses", emObj.toString());
 
                         Cursor addressCursor = cr.query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
                                 null, ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID + "=?", filter, null);
@@ -104,7 +109,9 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
 
                             if ((address != null) && (type != null)) {
                                 addressObj.put(address, type);
+                                detailType.put("Address", addressObj);
                             }
+
                         }
 
 
@@ -120,6 +127,9 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
 
                             if ((organisation != null) && (title != null) && (MIMETYPE_ORG.equals("vnd.android.cursor.item/organization"))) {
                                 orgObj.put(organisation, title);
+                                detailType.put("Organisation", orgObj);
+                            } else {
+                                detailType.put("Organisation", blank);
                             }
 
                             String IMtype = genericCursor.getString(genericCursor.getColumnIndex(ContactsContract.CommonDataKinds.Im.PROTOCOL));
@@ -128,6 +138,9 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
 
                             if ((IMtype != null) && (IMvalue != null) && (MIMETYPE_IM.equals("vnd.android.cursor.item/im"))) {
                                 IMobj.put(IMvalue, IMtype);
+                                detailType.put("IMs", IMobj);
+                            } else {
+                                detailType.put("IMs", blank);
                             }
 
                             String websiteVal = genericCursor.getString(genericCursor.getColumnIndex(ContactsContract.CommonDataKinds.Website.URL));
@@ -135,6 +148,9 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
 
                             if ((websiteVal != null) && (MIMETYPE_URL.equals("vnd.android.cursor.item/website"))) {
                                 websiteObj.put(websiteVal, "website");
+                                detailType.put("website", websiteVal);
+                            } else {
+                                detailType.put("website", blank);
                             }
 
 
@@ -143,15 +159,16 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
 
                             if ((notesVal != null) && (MIMETYPE_NOTE.equals("vnd.android.cursor.item/note"))) {
                                 noteObj.put(notesVal, "Note");
+                                detailType.put("Note", noteObj);
+                            } else {
+                                detailType.put("Note", blank);
                             }
                         }
-                        detailType.put("Address", addressObj.toString());
-                        detailType.put("Note", noteObj.toString());
-                        detailType.put("website", websiteObj.toString());
-                        detailType.put("Organisation", orgObj.toString());
-                        detailType.put("IM", IMobj.toString());
+
+
                         detailType.put("accountName", accountName);
                         detailType.put("accountType", accountType);
+                        detailType.put("contactName", name);
                         genericCursor.close();
                         addressCursor.close();
                         emailCursor.close();
