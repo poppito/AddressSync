@@ -64,17 +64,14 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
             case (R.id.unsyncme):
                 SparseBooleanArray checked = unsyncStatusList.getCheckedItemPositions();
                 for (int i = 0; i < checked.size(); i++) {
-
                     int key = checked.keyAt(i);
                     boolean value = checked.get(key);
                     if (value) {
                         removePhoneContacts.add((String) unsyncStatusList.getItemAtPosition(key));
                     }
                 }
-                for (String name : removePhoneContacts) {
-                    DeleteFile df = new DeleteFile(getActivity(), name, removePhoneContacts.size(), removePhoneContacts.indexOf(name) + 1);
-                    df.execute();
-                }
+                DeleteFile df = new DeleteFile(this, getActivity(), removePhoneContacts);
+                df.execute();
                 break;
         }
 

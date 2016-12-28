@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
+
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
+
+import java.util.ArrayList;
 
 
 public class DeleteFile extends AsyncTask<Void, Integer, Void> {
@@ -17,27 +20,31 @@ public class DeleteFile extends AsyncTask<Void, Integer, Void> {
     public Context context;
     AndroidAuthSession newSession;
     private DropboxAPI emboDBApi;
-    private String fileName;
     private int totalCount;
     private int currentCount;
     private ProgressDialog mProgressDialog;
+    private UpdateableFragment frag;
+    private ArrayList<String> fileNames;
 
 
-    public DeleteFile(Context c, String fileName, int totalCount, int currentCount) {
+    public DeleteFile(UpdateableFragment frag, Context c, ArrayList<String> fileNames) {
         this.context = c;
         SharedPreferences prefs = c.getSharedPreferences("prefs", Context.MODE_PRIVATE);
         newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
         emboDBApi = new DropboxAPI<>(newSession);
-        this.fileName = fileName;
-        this.totalCount = totalCount;
-        this.currentCount = currentCount;
+        this.fileNames = fileNames;
+        this.frag = frag;
+        totalCount = fileNames.size();
     }
 
     @Override
     protected Void doInBackground(Void... params) {
         try {
-            publishProgress(totalCount, currentCount);
-            emboDBApi.delete(fileName);
+            for (String name : fileNames) {
+                currentCount = fileNames.indexOf(name);
+                publishProgress(totalCount, currentCount);
+                emboDBApi.delete(name);
+            }
         } catch (DropboxException e) {
             Log.v(TAG, "Dropbox exception thrown");
             e.printStackTrace();
@@ -63,6 +70,7 @@ public class DeleteFile extends AsyncTask<Void, Integer, Void> {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
+        frag.update();
     }
 
 

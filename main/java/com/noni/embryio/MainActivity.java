@@ -32,9 +32,13 @@ public class MainActivity extends FragmentActivity implements TabListener, OnPag
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        CreateContactsContent createContactsContent = new CreateContactsContent(this.getApplicationContext(), this.getContentResolver(), ListOperations.getPhoneContactNames(this.getContentResolver()));
-        createContactsContent.mListener = this;
-        createContactsContent.execute();
+		for (int tab_name: Tabs) {
+			actionBar.addTab(actionBar.newTab().setIcon(tab_name).setTabListener(this));
+		}
+		viewPager.setOnPageChangeListener(this);
+        //CreateContactsContent createContactsContent = new CreateContactsContent(this.getApplicationContext(), this.getContentResolver(), ListOperations.getPhoneContactNames(this.getContentResolver()));
+        //createContactsContent.mListener = this;
+        //createContactsContent.execute();
     }
 
     @Override
@@ -109,9 +113,6 @@ public class MainActivity extends FragmentActivity implements TabListener, OnPag
 
     @Override
     public void onExecutionCompleted(String[] names) {
-        for (int tab_name: Tabs) {
-            actionBar.addTab(actionBar.newTab().setIcon(tab_name).setTabListener(this));
-        }
-        viewPager.setOnPageChangeListener(this);
+
     }
 }

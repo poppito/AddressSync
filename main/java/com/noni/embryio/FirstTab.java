@@ -1,5 +1,4 @@
 package com.noni.embryio;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -51,7 +49,6 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
         dbContactList = new DropboxContactsList(getActivity());
         dbContactList.mListener = this;
         dbContactList.execute();
-        //	Log.e(TAG, "contacts on phone " + allPhoneContacts.size() + " and contacts on server are " + listViewContents.size());
         return rootView;
     }
 
@@ -72,20 +69,7 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
                 break;
             case R.id.usyncme:
                 Log.v(TAG, "sync me button pressed!");
-                ArrayList<String> selectedItemList = new ArrayList<>();
-                SparseBooleanArray checked = syncStatusList.getCheckedItemPositions();
-                for (int i = 0; i < checked.size(); i++) {
-                    int key = checked.keyAt(i);
-                    boolean value = checked.get(key);
-                    if (value) {
-                        Log.v(TAG, "adding " + syncStatusList.getItemAtPosition(key));
-                        selectedItemList.add((String) syncStatusList.getItemAtPosition(key));
-                    }
-                }
-                for (String name : selectedItemList) {
-                    DownloadFile df = new DownloadFile(getActivity(), name, selectedItemList.size(), selectedItemList.indexOf(name) + 1);
-                    df.execute();
-                }
+                runDownloadsForSelectedItems(syncStatusList);
         }
 
     }
@@ -94,12 +78,27 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
     public void dropboxContactListReceived(ArrayList<String> names) {
         listViewContents = names;
         allPhoneContacts = ListOperations.getPhoneContactNames(getActivity().getContentResolver());
-        totalContactCount = allPhoneContacts.size();
         unsyncedphoneContacts = ListOperations.getUnsyncedList(listViewContents, allPhoneContacts);
         Collections.sort(unsyncedphoneContacts);
         ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, unsyncedphoneContacts);
         syncStatusList.setAdapter(mArrayAdapter);
         syncStatusList.setChoiceMode(syncStatusList.CHOICE_MODE_MULTIPLE);
+    }
+
+
+    private void runDownloadsForSelectedItems(ListView listView) {
+        ArrayList<String> selectedItemList = new ArrayList<>();
+        SparseBooleanArray checked = listView.getCheckedItemPositions();
+        for (int i = 0; i < checked.size(); i++) {
+            int key = checked.keyAt(i);
+            boolean value = checked.get(key);
+            if (value) {
+                Log.v(TAG, "adding " + listView.getItemAtPosition(key));
+                selectedItemList.add((String) listView.getItemAtPosition(key));
+            }
+        }
+        DownloadFile df = new DownloadFile(this, getActivity(), selectedItemList);
+        df.execute();
     }
 }
 
