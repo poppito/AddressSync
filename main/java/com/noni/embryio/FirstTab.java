@@ -38,7 +38,7 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.get_sync_status, container, false);
+        View rootView = inflater.inflate(R.layout.frag_first_tab, container, false);
         syncStatusList = (ListView) rootView.findViewById(R.id.listcontacts1);
         selectall = (Button) rootView.findViewById(R.id.selectall);
         deselectall = (Button) rootView.findViewById(R.id.deselectall);

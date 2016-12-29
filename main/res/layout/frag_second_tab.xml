@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/bg"
+                tools:context=".Second_Tab">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/selectall"
+            android:layout_width="0dp"
+            android:layout_weight="0.33"
+            android:textSize="14sp"
+            android:layout_height="wrap_content"
+            android:text="select all">
+        </Button>
+
+
+        <Button
+            android:id="@+id/deselectall"
+            android:layout_width="0dp"
+            android:layout_weight="0.33"
+            android:textSize="14sp"
+            android:layout_height="wrap_content"
+            android:text="de-select all">
+        </Button>
+
+        <Button
+            android:id="@+id/syncme"
+            android:layout_width="0dp"
+            android:layout_weight="0.33"
+            android:textSize="14sp"
+            android:layout_height="wrap_content"
+            android:text="backup contact">
+        </Button>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listcontacts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/linearLayoutButtons"
+        android:layout_centerInParent="true"
+        android:background="@color/embryio">
+    </ListView>
+
+</RelativeLayout>

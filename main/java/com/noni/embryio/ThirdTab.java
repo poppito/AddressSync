@@ -33,7 +33,7 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.third_tab, container, false);
+        View rootView = inflater.inflate(R.layout.frag_third_tab, container, false);
         unsyncStatusList = (ListView) rootView.findViewById(R.id.embryiocontacts);
         selectall = (Button) rootView.findViewById(R.id.eselectall);
         selectall.setOnClickListener(this);

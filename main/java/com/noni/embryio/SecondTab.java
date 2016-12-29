@@ -34,14 +34,14 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_get_contacts, container, false);
+        View rootView = inflater.inflate(R.layout.frag_second_tab, container, false);
         listContacts = (ListView) rootView.findViewById(R.id.listcontacts);
         Button selectall = (Button) rootView.findViewById(R.id.selectall);
         Button deselectall = (Button) rootView.findViewById(R.id.deselectall);
-        Button syncme = (Button) rootView.findViewById(R.id.syncme);
+        Button backupContacts = (Button) rootView.findViewById(R.id.syncme);
         selectall.setOnClickListener(this);
         deselectall.setOnClickListener(this);
-        syncme.setOnClickListener(this);
+        backupContacts.setOnClickListener(this);
         dbContactList = new DropboxContactsList(getActivity());
         dbContactList.mListener = this;
         dbContactList.execute();

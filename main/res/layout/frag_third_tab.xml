@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/bg">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/linearLayoutButtons"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/eselectall"
+            android:layout_width="0dp"
+            android:layout_weight="0.33"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="select all">
+        </Button>
+
+
+        <Button
+            android:id="@+id/edeselectall"
+            android:layout_width="0dp"
+            android:layout_weight="0.33"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="de-select all">
+        </Button>
+
+        <Button
+            android:id="@+id/unsyncme"
+            android:layout_width="0dp"
+            android:layout_weight="0.33"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="delete contact">
+        </Button>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/embryiocontacts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/linearLayoutButtons"
+        android:layout_centerInParent="true"
+        android:background="@color/embryio">
+    </ListView>
+
+</RelativeLayout>
