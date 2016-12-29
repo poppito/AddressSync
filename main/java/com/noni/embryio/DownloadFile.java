@@ -79,8 +79,8 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
         super.onPreExecute();
         mProgressDialog = new ProgressDialog(context);
         mProgressDialog.setProgress(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setTitle("Send contacts for sync");
-        mProgressDialog.setMessage("Just a second.");
+        mProgressDialog.setTitle("Please wait...");
+        mProgressDialog.setMessage("Downloading contacts now.");
         mProgressDialog.setCancelable(false);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.show();

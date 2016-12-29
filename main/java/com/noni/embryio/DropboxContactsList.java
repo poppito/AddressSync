@@ -34,8 +34,8 @@ public class DropboxContactsList extends AsyncTask<Void, Void, ArrayList<String>
         super.onPreExecute();
         mProgressDialog = new ProgressDialog(context);
         mProgressDialog.setProgress(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setTitle("Loading...");
-        mProgressDialog.setMessage("Just a second.");
+        mProgressDialog.setTitle("Please wait...");
+        mProgressDialog.setMessage("Loading your contact list");
         mProgressDialog.setCancelable(false);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.show();

@@ -57,8 +57,8 @@ public class DeleteFile extends AsyncTask<Void, Integer, Void> {
         super.onPreExecute();
         mProgressDialog = new ProgressDialog(context);
         mProgressDialog.setProgress(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setTitle("Send contacts for deletion");
-        mProgressDialog.setMessage("Just a second.");
+        mProgressDialog.setTitle("Please wait...");
+        mProgressDialog.setMessage("Deleting contacts from Dropbox");
         mProgressDialog.setCancelable(false);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.show();
