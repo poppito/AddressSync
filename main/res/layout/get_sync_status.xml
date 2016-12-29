@@ -1,60 +1,49 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/bg"
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content">
- <TextView
-    android:layout_width="@dimen/tvSizeHalf"
-    android:layout_height="@dimen/tvHeight"
-   	android:id="@+id/space1">
-   	</TextView>
-<Button
-    android:layout_width="@dimen/iconSize"
-    android:layout_height="@dimen/iconSize"
-	android:background="@drawable/ic_action_select_all"
-    android:id="@+id/uselectall"
-    android:layout_toRightOf="@id/space1">
-</Button>
-<TextView
-    android:layout_toRightOf="@id/uselectall"
-    android:layout_width="@dimen/tvSizeFull"
-    android:layout_height="@dimen/tvHeight"
-   	android:id="@+id/space2">
-   	</TextView>
-<Button
-    android:layout_width="@dimen/iconSize"
-    android:layout_height="@dimen/iconSize"
-    android:background="@drawable/ic_action_undo"
-    android:id="@+id/udeselectall"
-    android:layout_toRightOf="@id/space2">
-</Button>
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/bg">
 
-<TextView
-    android:layout_toRightOf="@id/udeselectall"
-    android:layout_width="@dimen/tvSizeFull"
-    android:layout_height="@dimen/tvHeight"
-   	android:id="@+id/space3">
-   	</TextView>
-<Button
-    android:layout_width="@dimen/iconSize"
-    android:layout_height="@dimen/iconSize"
-    android:id="@+id/usyncme"
-    android:background="@drawable/ic_action_download"
-    android:layout_toRightOf="@id/space3">
-</Button>
-<TextView
-    android:layout_toRightOf="@id/usyncme"
-    android:layout_width="@dimen/tvSizeHalf"
-    android:layout_height="@dimen/tvHeight"
-   	android:id="@+id/space4">
-</TextView>
-<ListView 
-    	android:layout_below="@id/space1"
-    	android:background="@color/embryio"
-        android:id="@+id/listcontacts1"
-        android:layout_height="match_parent"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_centerInParent="true">  
-    </ListView>
+        android:id="@+id/buttonLayout"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="15dp"
+        android:gravity="center">
 
+        <Button
+            android:id="@+id/selectall"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.33"
+            android:textSize="14sp"
+            android:text="select all">
+        </Button>
+
+
+        <Button
+            android:id="@+id/deselectall"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.33"
+            android:textSize="14sp"
+            android:text="de-select all">
+        </Button>
+
+        <Button
+            android:id="@+id/downloadContacts"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.33"
+            android:textSize="14sp"
+            android:text="download contact">
+        </Button>
+    </LinearLayout>
+    <ListView
+        android:id="@+id/listcontacts1"
+        android:layout_below="@id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/embryio">
+    </ListView>
 </RelativeLayout>

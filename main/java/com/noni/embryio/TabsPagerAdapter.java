@@ -5,13 +5,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
-import java.util.ArrayList;
-
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
     public FragmentManager fm;
     public final String TAG = "TabsPagerAdapter";
-    private ArrayList<String> allPhoneContacts, duplicateContacts, syncedContacts;
     public Fragment FT = new FirstTab();
     public Fragment ST = new SecondTab();
     public Fragment TT = new ThirdTab();

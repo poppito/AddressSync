@@ -20,7 +20,7 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
     private ArrayList<String> listViewContents = new ArrayList<>();
     private ArrayList<String> allPhoneContacts, unsyncedphoneContacts;
     private int totalContactCount;
-    private Button uselectall, udeselectall, usyncme;
+    private Button selectall, deselectall, downloadContacts;
     public OnDropboxContactListReceivedListener mListener;
     private DropboxContactsList dbContactList;
     private ArrayAdapter mArrayAdapter;
@@ -40,12 +40,12 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
 
         View rootView = inflater.inflate(R.layout.get_sync_status, container, false);
         syncStatusList = (ListView) rootView.findViewById(R.id.listcontacts1);
-        uselectall = (Button) rootView.findViewById(R.id.uselectall);
-        udeselectall = (Button) rootView.findViewById(R.id.udeselectall);
-        usyncme = (Button) rootView.findViewById(R.id.usyncme);
-        uselectall.setOnClickListener(this);
-        usyncme.setOnClickListener(this);
-        udeselectall.setOnClickListener(this);
+        selectall = (Button) rootView.findViewById(R.id.selectall);
+        deselectall = (Button) rootView.findViewById(R.id.deselectall);
+        downloadContacts = (Button) rootView.findViewById(R.id.downloadContacts);
+        selectall.setOnClickListener(this);
+        downloadContacts.setOnClickListener(this);
+        deselectall.setOnClickListener(this);
         dbContactList = new DropboxContactsList(getActivity());
         dbContactList.mListener = this;
         dbContactList.execute();
@@ -56,18 +56,18 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.uselectall:
+            case R.id.selectall:
                 for (int i = 0; i < syncStatusList.getCount(); i++) {
                     syncStatusList.setItemChecked(i, true);
                 }
                 break;
 
-            case R.id.udeselectall:
+            case R.id.deselectall:
                 for (int i = 0; i < syncStatusList.getCount(); i++) {
                     syncStatusList.setItemChecked(i, false);
                 }
                 break;
-            case R.id.usyncme:
+            case R.id.downloadContacts:
                 Log.v(TAG, "sync me button pressed!");
                 runDownloadsForSelectedItems(syncStatusList);
         }
