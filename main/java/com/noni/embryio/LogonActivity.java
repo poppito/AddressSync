@@ -30,8 +30,8 @@ public class LogonActivity extends FragmentActivity implements OnClickListener {
 
 
     protected void onCreate(Bundle savedInstanceState) {
-        final String termsURL = "https://poppito.github.io/terms";
-        final String whyDropboxURL = "https://poppito.github.io/whyDropbox";
+        final String termsURL = "http://embry.io/post/2016/12/29/License-details.html";
+        final String whyDropboxURL = "http://embry.io/post/2016/12/30/why-dropbox.html";
         final String licenseSpan = "License Terms";
         super.onCreate(savedInstanceState);
         emboDBApi = new DropboxAPI<>(newSession);
