@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
@@ -20,7 +20,7 @@ import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 
 
-public class LogonActivity extends FragmentActivity implements OnClickListener {
+public class LogonActivity extends AppCompatActivity implements OnClickListener {
 
     private SharedPreferences prefs;
     private final String TAG = this.getClass().getSimpleName();
@@ -36,6 +36,8 @@ public class LogonActivity extends FragmentActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         emboDBApi = new DropboxAPI<>(newSession);
         setContentView(R.layout.logonview);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         Button logonButton = (Button) findViewById(R.id.logonbutton);
         TextView whyDropboxView = (TextView) findViewById(R.id.explainWhy);
         initialiseClickableSpan(this, whyDropboxView, whyDropboxURL, getResources().getString(R.string.whyDropbox));
@@ -55,7 +57,6 @@ public class LogonActivity extends FragmentActivity implements OnClickListener {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 context.startActivity(browserIntent);
             }
-
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);

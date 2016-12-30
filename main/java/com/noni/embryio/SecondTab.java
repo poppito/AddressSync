@@ -1,6 +1,7 @@
 package com.noni.embryio;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +29,7 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
     private final static int TIMEOUT_MILLSEC = 1000;
     private DropboxContactsList dbContactList;
     private ArrayAdapter<String> mArrayAdapter;
+    private RelativeLayout mRootView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +108,12 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
 
 
     private void createContactsContentForSelected(ArrayList<String> selectedItemList, ListView listContacts) {
-       SparseBooleanArray mChecked = listContacts.getCheckedItemPositions();
+        SparseBooleanArray mChecked = listContacts.getCheckedItemPositions();
+        if (mChecked.size() <= 0) {
+            Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.noContentToSend), Snackbar.LENGTH_SHORT);
+            snackbar.show();
+            return;
+        }
         for (int i = 0; i < mChecked.size(); i++) {
             int key = mChecked.keyAt(i);
             boolean value = mChecked.get(key);

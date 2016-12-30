@@ -1,12 +1,9 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/tableLayout1"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
              android:background="@drawable/bg_logon_view"
              android:gravity="center"
-             android:orientation="vertical"
-             tools:context=".MainActivity">
+             android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -30,6 +27,8 @@
             android:layout_height="wrap_content"
             android:background="@color/bg"
             android:padding="10dp"
+            android:clickable="true"
+            android:textColor="@color/white"
             android:contentDescription="@string/logonbutton"
             android:text="@string/logonbutton"/>
     </LinearLayout>
@@ -40,6 +39,7 @@
         android:layout_height="wrap_content"
         android:autoLink="web"
         android:gravity="center_horizontal"
+        android:textColor="@color/white"
         android:text="@string/whyDropbox">
     </TextView>
 
@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"
         android:autoLink="web"
         android:gravity="center_horizontal"
+        android:textColor="@color/white"
         android:text="@string/licenseTerms">
     </TextView>
 </TableLayout>

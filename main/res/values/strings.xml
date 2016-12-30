@@ -18,11 +18,14 @@
      <string name="logonbutton">Login with Dropbox</string>
      <string name="rememberpref">Remember logon</string>
      <string name="submitbutton">Create</string>
-     <string name="resetbutton">Register</string>
      <string name="emailaddress">Email</string>
      <color name="embryio">#00AAEF</color>
      <string name="logon">Register. Logon. Sync.                                 </string>
      <color name="bg">#003399</color>
+    <color name="darkPrimary">#0288D1</color>
+    <color name="primary">#03A9F4</color>
+    <color name="textColor">#212121</color>
+    <color name="colorAccent">#FFEB3B</color>
      <color name="titletextcolour">#9f56a6</color>
      <string name="retrievephonecontacts">Woohoo! No unsynced contacts, go you!</string>
      <string name="logonstatus"></string>
@@ -53,5 +56,7 @@
     <string name="merge_back">Back</string>
     <string name="whyDropbox">Why Dropbox?</string>
     <string name="licenseTerms">By logging in, you agree to the License Terms.</string>
-
+    <string name="noContentToSend">Nothing to send for backup.</string>
+    <string name="noContentToDownload">Nothing to download.</string>
+    <string name="nothingToDelete">Nothing to delete.</string>
 </resources>

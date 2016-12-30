@@ -1,5 +1,6 @@
 package com.noni.embryio;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -98,6 +99,11 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
 
     private void runDownloadsForSelectedItems(ListView listView) {
         ArrayList<String> selectedItemList = new ArrayList<>();
+        if (selectedItemList.size() <= 0) {
+            Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.noContentToDownload), Snackbar.LENGTH_SHORT);
+            snackbar.show();
+            return;
+        }
         SparseBooleanArray checked = listView.getCheckedItemPositions();
         for (int i = 0; i < checked.size(); i++) {
             int key = checked.keyAt(i);
