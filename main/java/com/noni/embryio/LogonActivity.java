@@ -1,10 +1,12 @@
 package com.noni.embryio;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.TextPaint;
@@ -27,11 +29,12 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
     private DropboxAPI<AndroidAuthSession> emboDBApi;
     private AndroidAuthSession newSession = new AndroidAuthSession(Constants.KEY_PAIR);
     private Boolean buttonPressed = false;
+    private ProgressDialog mProgressDialog;
 
 
     protected void onCreate(Bundle savedInstanceState) {
-        final String termsURL = "http://embry.io/post/2016/12/29/License-details.html";
-        final String whyDropboxURL = "http://embry.io/post/2016/12/30/why-dropbox.html";
+        String termsURL = Constants.TERMS_URL;
+        String whyDropboxURL = Constants.WHY_DROPBOX_URL;
         final String licenseSpan = "License Terms";
         super.onCreate(savedInstanceState);
         emboDBApi = new DropboxAPI<>(newSession);
@@ -93,6 +96,10 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
                 } catch (IllegalStateException e) {
                     Log.v(TAG, "Error authenticating", e);
                 }
+            } else {
+                dismissLogonLoader(mProgressDialog);
+                Snackbar sb = Snackbar.make(findViewById(android.R.id.content), "Logon failed", Snackbar.LENGTH_SHORT);
+                sb.show();
             }
             if (!tokenExists()) {
                 startSessionWhenUnlinked(this);
@@ -112,6 +119,8 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
             case R.id.logonbutton: {
                 Log.v(TAG, "logon button pressed");
                 buttonPressed = true;
+                mProgressDialog = showLogonLoader();
+                mProgressDialog.show();
                 if (!isDBLinked()) {
                     Log.v(TAG, "Db unlinked eh");
                     startSessionWhenUnlinked(this);
@@ -167,6 +176,22 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         index[0] = containingString.indexOf(keyword);
         index[1] = index[0] + keyword.length();
         return index;
+    }
+
+    public ProgressDialog showLogonLoader() {
+        ProgressDialog mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setProgress(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setTitle("Please wait...");
+        mProgressDialog.setMessage("Logging you in..");
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setIndeterminate(true);
+        return mProgressDialog;
+    }
+
+    public void dismissLogonLoader(ProgressDialog progressDialog) {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
     }
 }
 
