@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -99,12 +100,12 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
 
     private void runDownloadsForSelectedItems(ListView listView) {
         ArrayList<String> selectedItemList = new ArrayList<>();
-        if (selectedItemList.size() <= 0) {
+        SparseBooleanArray checked = listView.getCheckedItemPositions();
+        if (checked.size() <= 0) {
             Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.noContentToDownload), Snackbar.LENGTH_SHORT);
             snackbar.show();
             return;
         }
-        SparseBooleanArray checked = listView.getCheckedItemPositions();
         for (int i = 0; i < checked.size(); i++) {
             int key = checked.keyAt(i);
             boolean value = checked.get(key);

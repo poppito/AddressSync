@@ -77,7 +77,7 @@ public class DeleteFile extends AsyncTask<Void, Integer, Void> {
     @Override
     protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
-        String progressUpdate = "Sending " + String.valueOf(values[1]) + " of " + String.valueOf(values[0]) + " contacts";
+        String progressUpdate = "Deleting " + String.valueOf(values[1]) + " of " + String.valueOf(values[0]) + " contacts";
         mProgressDialog.setMessage(progressUpdate);
     }
 }
