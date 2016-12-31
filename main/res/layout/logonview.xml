@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="@drawable/bg_logon_view"
-             android:gravity="center"
-             android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/bg_logon_view"
+              android:gravity="center"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -25,12 +25,12 @@
             android:id="@+id/logonbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:clickable="true"
-            android:textColor="@color/white"
             android:background="@color/button_material_dark"
+            android:clickable="true"
             android:contentDescription="@string/logonbutton"
-            android:text="@string/logonbutton">
+            android:padding="10dp"
+            android:text="@string/logonbutton"
+            android:textColor="@color/white">
         </Button>
     </LinearLayout>
 
@@ -40,8 +40,8 @@
         android:layout_height="wrap_content"
         android:autoLink="web"
         android:gravity="center_horizontal"
-        android:textColor="@color/white"
-        android:text="@string/whyDropbox">
+        android:text="@string/whyDropbox"
+        android:textColor="@color/white">
     </TextView>
 
     <TextView
@@ -50,7 +50,17 @@
         android:layout_height="wrap_content"
         android:autoLink="web"
         android:gravity="center_horizontal"
-        android:textColor="@color/white"
-        android:text="@string/licenseTerms">
+        android:text="@string/licenseTerms"
+        android:textColor="@color/white">
+    </TextView>
+
+    <TextView
+        android:id="@+id/privacyPolicy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:gravity="center_horizontal"
+        android:text="@string/privacyPolicy"
+        android:textColor="@color/white">
     </TextView>
 </LinearLayout>

@@ -35,6 +35,7 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         String termsURL = Constants.TERMS_URL;
         String whyDropboxURL = Constants.WHY_DROPBOX_URL;
+        String privacyPolicyURL = Constants.PRIVACY_POLICY_URL;
         final String licenseSpan = "License Terms";
         super.onCreate(savedInstanceState);
         emboDBApi = new DropboxAPI<>(newSession);
@@ -46,6 +47,8 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         initialiseClickableSpan(this, whyDropboxView, whyDropboxURL, getResources().getString(R.string.whyDropbox));
         TextView licenseAgreementView = (TextView) findViewById(R.id.licenseAgreement);
         initialiseClickableSpan(this, licenseAgreementView, termsURL, licenseSpan);
+        TextView privacyPolicy = (TextView) findViewById(R.id.privacyPolicy);
+        initialiseClickableSpan(this, privacyPolicy, privacyPolicyURL, getResources().getString(R.string.privacyPolicy));
         logonButton.setOnClickListener(this);
         prefs = this.getSharedPreferences("prefs", MODE_PRIVATE);
     }

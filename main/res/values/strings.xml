@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">embry.io</string>
+    <string name="app_name">Syncapp</string>
     <string name="First">First</string>
     <string name="notathing">Nothing to see here, not a thing!</string>
     <color name="background">#ffffff</color>
@@ -59,4 +59,5 @@
     <string name="noContentToSend">Nothing to send for backup.</string>
     <string name="noContentToDownload">Nothing to download.</string>
     <string name="nothingToDelete">Nothing to delete.</string>
+    <string name="privacyPolicy">Privacy Policy</string>
 </resources>
