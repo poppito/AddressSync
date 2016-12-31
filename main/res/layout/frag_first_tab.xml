@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/bg">
+              android:background="@color/darkPrimary">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,6 +17,9 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:textSize="14sp"
+            android:layout_margin="5dp"
+            android:textColor="@color/white"
+            android:background="@color/button_material_dark"
             android:text="select all">
         </Button>
 
@@ -27,6 +30,9 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:textSize="14sp"
+            android:layout_margin="5dp"
+            android:textColor="@color/white"
+            android:background="@color/button_material_dark"
             android:text="de-select all">
         </Button>
 
@@ -36,6 +42,9 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:textSize="14sp"
+            android:layout_margin="5dp"
+            android:textColor="@color/white"
+            android:background="@color/button_material_dark"
             android:text="download contact">
         </Button>
     </LinearLayout>

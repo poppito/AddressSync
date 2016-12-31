@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/bg">
+                android:background="@color/darkPrimary">
 
     <LinearLayout
         android:id="@+id/linearLayoutButtons"
@@ -17,6 +17,9 @@
             android:layout_weight="0.33"
             android:textSize="14sp"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@color/button_material_dark"
+            android:textColor="@color/white"
             android:text="select all">
         </Button>
 
@@ -24,18 +27,24 @@
         <Button
             android:id="@+id/deselectall"
             android:layout_width="0dp"
+            android:layout_margin="5dp"
             android:layout_weight="0.33"
             android:textSize="14sp"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:background="@color/button_material_dark"
             android:text="de-select all">
         </Button>
 
         <Button
             android:id="@+id/syncme"
             android:layout_width="0dp"
+            android:layout_margin="5dp"
             android:layout_weight="0.33"
             android:textSize="14sp"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:background="@color/button_material_dark"
             android:text="backup contact">
         </Button>
     </LinearLayout>
