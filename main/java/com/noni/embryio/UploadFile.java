@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class UploadFile extends AsyncTask<Void, Integer, String> {
 
     private final String TAG = this.getClass().getSimpleName();
-    public Context context;
+    private Context context;
     AndroidAuthSession newSession;
     private DropboxAPI emboDBApi;
     private ArrayList<String> fileNames;
