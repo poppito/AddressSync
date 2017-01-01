@@ -18,11 +18,10 @@ import java.util.ArrayList;
 
 public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
 
-    ArrayList<String> inputArrayList;
+    private ArrayList<String> inputArrayList;
     private final String TAG = this.getClass().getSimpleName();
-    public ContentResolver cr;
-    public Context context;
-    private int countingContacts = 1;
+    private ContentResolver cr;
+    private Context context;
     private String name = null;
     public OnExecutionCompletionListener mListener = null;
 
@@ -75,7 +74,6 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
 
 
                     if (inputArrayList.contains(name)) {
-                        countingContacts++;
                         String contactID = C.getString(C.getColumnIndex(ContactsContract.RawContacts.CONTACT_ID));
                         String[] filter = {contactID};
 
@@ -183,7 +181,7 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
 
                         String fileContent = detailType.toString();
 
-                        FileOutputStream FOS = null;
+                        FileOutputStream FOS;
                         try {
                             FOS = context.openFileOutput(name, context.MODE_PRIVATE);
                             try {
@@ -200,6 +198,7 @@ public class CreateContactsContent extends AsyncTask<Void, String, String[]> {
                     }
                 }
             }
+            C.close();
         } catch (JSONException e) {
             e.printStackTrace();
         }
