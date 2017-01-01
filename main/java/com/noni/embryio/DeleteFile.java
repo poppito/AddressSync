@@ -17,7 +17,7 @@ public class DeleteFile extends AsyncTask<Void, Integer, Void> {
 
 
     private final String TAG = this.getClass().getSimpleName();
-    public Context context;
+    private Context context;
     AndroidAuthSession newSession;
     private DropboxAPI emboDBApi;
     private int totalCount;

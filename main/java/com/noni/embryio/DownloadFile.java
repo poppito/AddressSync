@@ -27,7 +27,7 @@ import java.util.Iterator;
 
 public class DownloadFile extends AsyncTask<Void, Integer, String> {
     private final String TAG = this.getClass().getSimpleName();
-    public Context context;
+    private Context context;
     AndroidAuthSession newSession;
     private DropboxAPI emboDBApi;
     private ArrayList<String> fileNames;
@@ -96,8 +96,8 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
         try {
             String str = FileUtils.readFileToString(file, "utf8");
             JSONObject obj = (JSONObject) new JSONTokener(str).nextValue();
-            String accountName = null;
-            String accountType = null;
+            String accountName;
+            String accountType;
 
             ArrayList<ContentProviderOperation> Ops = new ArrayList<>();
             ContentProviderOperation.Builder op;
@@ -114,7 +114,6 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
             } else {
                 accountName = obj.getString("accountName");
                 accountType = obj.getString("accountType");
-                Log.v(TAG, "account name is " + accountName.toString() + " account type is " + accountType.toString());
                 op = ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
                         .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, accountName)
                         .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, accountType)
@@ -184,7 +183,6 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
 
                 while (iter.hasNext()) {
                     String key = (String) iter.next();
-                    String value = Notes.getString(key);
 
 
                     Log.v(TAG, "Note is " + key);
@@ -229,8 +227,6 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
 
                 while (iter.hasNext()) {
                     String key = (String) iter.next();
-                    String value = website.getString(key);
-
 
                     Log.v(TAG, "website is " + key);
 
@@ -275,7 +271,6 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
 
                 while (iter.hasNext()) {
                     String key = (String) iter.next();
-                    String value = nicknames.getString(key);
 
                     Log.v(TAG, "nickname is " + key);
 
