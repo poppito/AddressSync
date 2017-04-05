@@ -20,6 +20,9 @@ import android.widget.TextView;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 
 public class LogonActivity extends AppCompatActivity implements OnClickListener {
@@ -40,6 +43,10 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         super.onCreate(savedInstanceState);
         emboDBApi = new DropboxAPI<>(newSession);
         setContentView(R.layout.logonview);
+        MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.banner_ad_unit_id));
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
         Button logonButton = (Button) findViewById(R.id.logonbutton);

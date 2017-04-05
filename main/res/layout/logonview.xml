@@ -1,12 +1,15 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/bg_logon_view"
-              android:gravity="center"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_logon_view"
+                android:gravity="center"
+                android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -17,7 +20,7 @@
             android:id="@+id/appIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
             android:src="@drawable/ic_launcher">
         </ImageView>
 
@@ -35,32 +38,48 @@
     </LinearLayout>
 
     <TextView
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/button_container"
         android:id="@+id/explainWhy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autoLink="web"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:text="@string/whyDropbox"
         android:textColor="@color/white">
     </TextView>
 
     <TextView
+        android:layout_centerHorizontal="true"
         android:id="@+id/licenseAgreement"
+        android:layout_below="@id/explainWhy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autoLink="web"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:text="@string/licenseTerms"
         android:textColor="@color/white">
     </TextView>
 
     <TextView
+        android:layout_centerHorizontal="true"
         android:id="@+id/privacyPolicy"
+        android:layout_below="@+id/licenseAgreement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autoLink="web"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:text="@string/privacyPolicy"
         android:textColor="@color/white">
     </TextView>
-</LinearLayout>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
+</RelativeLayout>
