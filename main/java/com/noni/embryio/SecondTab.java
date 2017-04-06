@@ -14,6 +14,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -38,6 +42,10 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.frag_second_tab, container, false);
+        MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.banner_ad_unit_id));
+        AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         listContacts = (ListView) rootView.findViewById(R.id.listcontacts);
         Button selectall = (Button) rootView.findViewById(R.id.selectall);
         Button deselectall = (Button) rootView.findViewById(R.id.deselectall);

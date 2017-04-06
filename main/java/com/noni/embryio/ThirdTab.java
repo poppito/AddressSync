@@ -12,6 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -35,6 +39,10 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.frag_third_tab, container, false);
+        MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.banner_ad_unit_id));
+        AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         unsyncStatusList = (ListView) rootView.findViewById(R.id.embryiocontacts);
         selectall = (Button) rootView.findViewById(R.id.eselectall);
         selectall.setOnClickListener(this);

@@ -12,6 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -41,6 +45,10 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.frag_first_tab, container, false);
+        MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.banner_ad_unit_id));
+        AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         syncStatusList = (ListView) rootView.findViewById(R.id.listcontacts1);
         selectall = (Button) rootView.findViewById(R.id.selectall);
         deselectall = (Button) rootView.findViewById(R.id.deselectall);
