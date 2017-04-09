@@ -89,6 +89,7 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
         listViewContents = names;
         allPhoneContacts = ListOperations.getPhoneContactNames(getActivity().getContentResolver());
         unsyncedphoneContacts = ListOperations.getUnsyncedList(listViewContents, allPhoneContacts);
+        unsyncedphoneContacts = ListOperations.checkForNullSafety(unsyncedphoneContacts);
         Collections.sort(unsyncedphoneContacts);
         ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, unsyncedphoneContacts);
         syncStatusList.setAdapter(mArrayAdapter);

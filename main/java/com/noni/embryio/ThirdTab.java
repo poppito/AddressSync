@@ -114,6 +114,7 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
     public void dropboxContactListReceived(ArrayList<String> names) {
         listViewContents = names;
         ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, listViewContents);
+        listViewContents = ListOperations.checkForNullSafety(listViewContents);
         Collections.sort(listViewContents);
         unsyncStatusList.setAdapter(mArrayAdapter);
         unsyncStatusList.setChoiceMode(unsyncStatusList.CHOICE_MODE_MULTIPLE);

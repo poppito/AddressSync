@@ -109,6 +109,7 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
         allPhoneContacts = ListOperations.getPhoneContactNames(getActivity().getContentResolver()); //gets all contacts except ones marked for deletion
         displayList = ListOperations.getSyncedList(syncedContacts, allPhoneContacts); //compares synced contacts with unsynced ones to only show unsynced contacts
         mArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, displayList);
+        displayList = ListOperations.checkForNullSafety(displayList);
         Collections.sort(displayList);
         listContacts.setAdapter(mArrayAdapter);
         listContacts.setChoiceMode(listContacts.CHOICE_MODE_MULTIPLE);

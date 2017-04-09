@@ -83,4 +83,14 @@ public class ListOperations {
         return names;
     }
 
+    public static ArrayList<String> checkForNullSafety(ArrayList<String> in) {
+        ArrayList<String> out = new ArrayList<>();
+        for (int i=0; i<in.size(); i++) {
+            if (in.get(i) != null) {
+                out.add(in.get(i));
+            }
+        }
+        return out;
+    }
+
 }
