@@ -45,7 +45,6 @@ public class DropboxContactsList extends AsyncTask<Void, Void, ArrayList<String>
     protected ArrayList<String> doInBackground(Void... params) {
         fileNames = new ArrayList<>();
         try {
-            DropboxAPI.Account account = emboDBApi.accountInfo();
             DropboxAPI.Entry entry = emboDBApi.metadata("/", 10000, null, true, null);
             for (DropboxAPI.Entry ent : entry.contents) {
                 String name = ent.path;

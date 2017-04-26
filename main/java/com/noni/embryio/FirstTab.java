@@ -1,4 +1,5 @@
 package com.noni.embryio;
+
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -30,6 +32,7 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
     public OnDropboxContactListReceivedListener mListener;
     private DropboxContactsList dbContactList;
     private ArrayAdapter mArrayAdapter;
+    private TextView mEmptyPlaceHolder;
 
     @Override
     public void update() {
@@ -52,6 +55,7 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
         selectall = (Button) rootView.findViewById(R.id.selectall);
         deselectall = (Button) rootView.findViewById(R.id.deselectall);
         downloadContacts = (Button) rootView.findViewById(R.id.downloadContacts);
+        mEmptyPlaceHolder = (TextView) rootView.findViewById(R.id.empty_placeholder_download_contact);
         selectall.setOnClickListener(this);
         downloadContacts.setOnClickListener(this);
         deselectall.setOnClickListener(this);
@@ -89,10 +93,17 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
         allPhoneContacts = ListOperations.getPhoneContactNames(getActivity().getContentResolver());
         unsyncedphoneContacts = ListOperations.getUnsyncedList(listViewContents, allPhoneContacts);
         unsyncedphoneContacts = ListOperations.checkForNullSafety(unsyncedphoneContacts);
-        Collections.sort(unsyncedphoneContacts);
-        ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, unsyncedphoneContacts);
-        syncStatusList.setAdapter(mArrayAdapter);
-        syncStatusList.setChoiceMode(syncStatusList.CHOICE_MODE_MULTIPLE);
+        if (unsyncedphoneContacts.size() == 0) {
+            mEmptyPlaceHolder.setVisibility(View.VISIBLE);
+            syncStatusList.setVisibility(View.GONE);
+        } else {
+            Collections.sort(unsyncedphoneContacts);
+            ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, unsyncedphoneContacts);
+            syncStatusList.setAdapter(mArrayAdapter);
+            syncStatusList.setChoiceMode(syncStatusList.CHOICE_MODE_MULTIPLE);
+            mEmptyPlaceHolder.setVisibility(View.GONE);
+            syncStatusList.setVisibility(View.VISIBLE);
+        }
     }
 
 
