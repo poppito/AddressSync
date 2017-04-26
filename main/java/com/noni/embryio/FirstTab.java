@@ -33,7 +33,6 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
 
     @Override
     public void update() {
-        // TODO Auto-generated method stub
         if (getActivity() != null) {
             dbContactList = new DropboxContactsList(getActivity());
             dbContactList.mListener = this;
