@@ -27,7 +27,7 @@
     <color name="textColor">#212121</color>
     <color name="colorAccent">#FFEB3B</color>
      <color name="titletextcolour">#9f56a6</color>
-     <string name="retrievephonecontacts">Woohoo! No unsynced contacts, go you!</string>
+     <string name="first_tab_retrive_contacts_placeholder">Woohoo! No unsynced contacts to download, go you!</string>
      <string name="logonstatus"></string>
      <color name="white">#ffffff</color>
      <string name="updatesavailable"></string>

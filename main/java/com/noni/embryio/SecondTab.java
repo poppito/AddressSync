@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -33,7 +32,6 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
     private final static int TIMEOUT_MILLSEC = 1000;
     private DropboxContactsList dbContactList;
     private ArrayAdapter<String> mArrayAdapter;
-    private RelativeLayout mRootView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

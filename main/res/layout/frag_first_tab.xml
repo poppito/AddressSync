@@ -70,7 +70,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="21sp"
-            android:text="Woohoo! Nothing to see here!"/>
+            android:text="@string/first_tab_retrive_contacts_placeholder"/>
     </FrameLayout>
 
     <com.google.android.gms.ads.AdView
