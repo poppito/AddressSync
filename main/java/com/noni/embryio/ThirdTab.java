@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -30,6 +31,7 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
     private ArrayList<String> removePhoneContacts = new ArrayList<String>();
     private DropboxContactsList dbContactList;
     private OnDropboxContactListReceivedListener mListener;
+    private TextView mPlaceholderText;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,7 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
         deselectall.setOnClickListener(this);
         unsync = (Button) rootView.findViewById(R.id.unsyncme);
         unsync.setOnClickListener(this);
+        mPlaceholderText = (TextView) rootView.findViewById(R.id.empty_placeholder_delete_contact);
         dbContactList = new DropboxContactsList(getActivity());
         dbContactList.mListener = this;
         dbContactList.execute();

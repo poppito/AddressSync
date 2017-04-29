@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                xmlns:ads="http://schemas.android.com/apk/res-auto"
                 android:background="@color/darkPrimary">
 
     <LinearLayout
@@ -9,56 +9,69 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <Button
             android:id="@+id/selectall"
             android:layout_width="0dp"
-            android:layout_weight="0.33"
-            android:textSize="14sp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:layout_weight="0.33"
             android:background="@color/button_material_dark"
+            android:text="select all"
             android:textColor="@color/white"
-            android:text="select all">
+            android:textSize="14sp">
         </Button>
 
 
         <Button
             android:id="@+id/deselectall"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="0.33"
-            android:textSize="14sp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:background="@color/button_material_dark"
-            android:text="de-select all">
+            android:text="de-select all"
+            android:textColor="@color/white"
+            android:textSize="14sp">
         </Button>
 
         <Button
             android:id="@+id/syncme"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="0.33"
-            android:textSize="14sp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:background="@color/button_material_dark"
-            android:text="backup contact">
+            android:text="backup contact"
+            android:textColor="@color/white"
+            android:textSize="14sp">
         </Button>
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/listcontacts"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <FrameLayout
         android:layout_below="@id/linearLayoutButtons"
         android:layout_centerInParent="true"
-        android:paddingBottom="50dp"
-        android:background="@color/embryio">
-    </ListView>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ListView
+            android:id="@+id/listcontacts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/embryio"
+            android:paddingBottom="50dp">
+        </ListView>
+        <TextView
+            android:id="@+id/empty_placeholder_send_contact"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="21sp"
+            android:text="@string/second_tab_send_contacts_placeholder"/>
+    </FrameLayout>
+
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="wrap_content"

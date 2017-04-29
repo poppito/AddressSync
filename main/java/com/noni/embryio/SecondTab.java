@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -32,6 +33,7 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
     private final static int TIMEOUT_MILLSEC = 1000;
     private DropboxContactsList dbContactList;
     private ArrayAdapter<String> mArrayAdapter;
+    private TextView mPlaceholderView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,7 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
         Button selectall = (Button) rootView.findViewById(R.id.selectall);
         Button deselectall = (Button) rootView.findViewById(R.id.deselectall);
         Button backupContacts = (Button) rootView.findViewById(R.id.syncme);
+        mPlaceholderView = (TextView) rootView.findViewById(R.id.empty_placeholder_send_contact);
         selectall.setOnClickListener(this);
         deselectall.setOnClickListener(this);
         backupContacts.setOnClickListener(this);
@@ -106,11 +109,16 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
         syncedContacts = names;
         allPhoneContacts = ListOperations.getPhoneContactNames(getActivity().getContentResolver()); //gets all contacts except ones marked for deletion
         displayList = ListOperations.getSyncedList(syncedContacts, allPhoneContacts); //compares synced contacts with unsynced ones to only show unsynced contacts
-        mArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, displayList);
-        displayList = ListOperations.checkForNullSafety(displayList);
-        Collections.sort(displayList);
-        listContacts.setAdapter(mArrayAdapter);
-        listContacts.setChoiceMode(listContacts.CHOICE_MODE_MULTIPLE);
+        if (displayList.size() > 0) {
+            mArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, displayList);
+            displayList = ListOperations.checkForNullSafety(displayList);
+            Collections.sort(displayList);
+            listContacts.setAdapter(mArrayAdapter);
+            listContacts.setChoiceMode(listContacts.CHOICE_MODE_MULTIPLE);
+            mPlaceholderView.setVisibility(View.GONE);
+        } else {
+            mPlaceholderView.setVisibility(View.VISIBLE);
+        }
     }
 
 
