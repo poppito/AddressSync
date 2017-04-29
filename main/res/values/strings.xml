@@ -29,7 +29,7 @@
      <color name="titletextcolour">#9f56a6</color>
      <string name="first_tab_retrive_contacts_placeholder">Woohoo! No unsynced contacts to download, go you!</string>
      <string name="second_tab_send_contacts_placeholder">Woohoo! No local phone contacts to send, great job!</string>
-    <string name="third_tab_delete_contacts_placeholder">Woohoo! Nothing to delete on the server, good job!</string>
+    <string name="third_tab_delete_contacts_placeholder">Woohoo! Nothing to delete on the server. Perhaps you can start by sending some contacts to the cloud?</string>
      <string name="logonstatus"></string>
      <color name="white">#ffffff</color>
      <string name="updatesavailable"></string>

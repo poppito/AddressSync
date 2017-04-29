@@ -115,9 +115,11 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
             Collections.sort(displayList);
             listContacts.setAdapter(mArrayAdapter);
             listContacts.setChoiceMode(listContacts.CHOICE_MODE_MULTIPLE);
+            listContacts.setVisibility(View.VISIBLE);
             mPlaceholderView.setVisibility(View.GONE);
         } else {
             mPlaceholderView.setVisibility(View.VISIBLE);
+            listContacts.setVisibility(View.GONE);
         }
     }
 

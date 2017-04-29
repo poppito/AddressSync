@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:ads="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/frag_third_tab_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/darkPrimary">
