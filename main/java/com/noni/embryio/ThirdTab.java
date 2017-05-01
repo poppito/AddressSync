@@ -91,7 +91,7 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
                 break;
             case (R.id.unsyncme):
                 SparseBooleanArray checked = unsyncStatusList.getCheckedItemPositions();
-                if (checked.size() <= 0) {
+                if (checked == null || checked.size() <= 0) {
                     Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.nothingToDelete), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                     break;
@@ -144,8 +144,9 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                SecondTab secondTab = new SecondTab();
-                getFragmentManager().beginTransaction().replace(R.id.frag_third_tab_content, secondTab).commit();
+                if (getActivity() instanceof MainActivity && ((MainActivity) getActivity()).getBar() != null) {
+                    ((MainActivity) getActivity()).getBar().setSelectedNavigationItem(1);
+                }
             }
 
             @Override

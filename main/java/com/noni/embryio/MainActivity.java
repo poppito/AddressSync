@@ -1,6 +1,7 @@
 package com.noni.embryio;
 
 import android.annotation.SuppressLint;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBar.TabListener;
 import android.os.Bundle;
@@ -15,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements TabListener, OnPa
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private int[] Tabs = { R.drawable.ic_actionbar_tab_download, R.drawable.ic_actionbar_tab_upload, R.drawable.ic_actionbar_tab_delete };
-    private android.support.v7.app.ActionBar actionBar;
+    private android.support.v7.app.ActionBar mActionBar;
     final static String TAG = "MainActivity";
 
     @Override
@@ -25,12 +26,12 @@ public class MainActivity extends AppCompatActivity implements TabListener, OnPa
         viewPager = (ViewPager) findViewById(R.id.pager);
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mAdapter);
-        actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(android.app.ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(false);
+        mActionBar = getSupportActionBar();
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
         for (int tab_name : Tabs) {
-            actionBar.addTab(actionBar.newTab().setIcon(tab_name).setTabListener(this));
+            mActionBar.addTab(mActionBar.newTab().setIcon(tab_name).setTabListener(this));
         }
         viewPager.setOnPageChangeListener(this);
     }
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements TabListener, OnPa
         Log.e(TAG, "hey, this is the current Fragment " + viewPager.getCurrentItem());
         mAdapter.onlyUpdatedSelected(viewPager.getCurrentItem());
         //Log.e(TAG, "ViewPager has " + viewPager.getCurrentItem());
-        actionBar.setSelectedNavigationItem(position);
+        mActionBar.setSelectedNavigationItem(position);
     }
 
     @Override
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements TabListener, OnPa
     @Override
     public void onTabSelected(Tab tab, android.support.v4.app.FragmentTransaction ft) {
         viewPager.setCurrentItem(tab.getPosition());
-        actionBar.setSelectedNavigationItem(tab.getPosition());
+        mActionBar.setSelectedNavigationItem(tab.getPosition());
         mAdapter.notifyDataSetChanged();
     }
 
@@ -99,5 +100,9 @@ public class MainActivity extends AppCompatActivity implements TabListener, OnPa
 
     @Override
     public void onTabReselected(Tab tab, android.support.v4.app.FragmentTransaction ft) {
+    }
+
+    public ActionBar getBar() {
+        return mActionBar;
     }
 }

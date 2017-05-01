@@ -120,21 +120,22 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
     private void runDownloadsForSelectedItems(ListView listView) {
         ArrayList<String> selectedItemList = new ArrayList<>();
         SparseBooleanArray checked = listView.getCheckedItemPositions();
-        if (checked.size() <= 0) {
+        if (checked == null || checked.size() <= 0) {
             Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.noContentToDownload), Snackbar.LENGTH_SHORT);
             snackbar.show();
             return;
         }
-        for (int i = 0; i < checked.size(); i++) {
-            int key = checked.keyAt(i);
-            boolean value = checked.get(key);
-            if (value) {
-                Log.v(TAG, "adding " + listView.getItemAtPosition(key));
-                selectedItemList.add((String) listView.getItemAtPosition(key));
+
+            for (int i = 0; i < checked.size(); i++) {
+                int key = checked.keyAt(i);
+                boolean value = checked.get(key);
+                if (value) {
+                    Log.v(TAG, "adding " + listView.getItemAtPosition(key));
+                    selectedItemList.add((String) listView.getItemAtPosition(key));
+                }
             }
-        }
-        DownloadFile df = new DownloadFile(this, getActivity(), selectedItemList);
-        df.execute();
+            DownloadFile df = new DownloadFile(this, getActivity(), selectedItemList);
+            df.execute();
     }
 }
 
