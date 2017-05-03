@@ -3,6 +3,10 @@ package com.noni.embryio;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -30,6 +35,7 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
     private ArrayList<String> removePhoneContacts = new ArrayList<String>();
     private DropboxContactsList dbContactList;
     private OnDropboxContactListReceivedListener mListener;
+    private TextView mPlaceholderText;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,7 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
         AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+        String spanString = getContext().getResources().getString(R.string.third_tab_delete_contacts_placeholder);
         unsyncStatusList = (ListView) rootView.findViewById(R.id.embryiocontacts);
         selectall = (Button) rootView.findViewById(R.id.eselectall);
         selectall.setOnClickListener(this);
@@ -50,9 +57,11 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
         deselectall.setOnClickListener(this);
         unsync = (Button) rootView.findViewById(R.id.unsyncme);
         unsync.setOnClickListener(this);
+        mPlaceholderText = (TextView) rootView.findViewById(R.id.empty_placeholder_delete_contact);
         dbContactList = new DropboxContactsList(getActivity());
         dbContactList.mListener = this;
         dbContactList.execute();
+        initialiseClickableSpan();
         return rootView;
     }
 
@@ -82,7 +91,7 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
                 break;
             case (R.id.unsyncme):
                 SparseBooleanArray checked = unsyncStatusList.getCheckedItemPositions();
-                if (checked.size() <= 0) {
+                if (checked == null || checked.size() <= 0) {
                     Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.nothingToDelete), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                     break;
@@ -113,10 +122,53 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
     @Override
     public void dropboxContactListReceived(ArrayList<String> names) {
         listViewContents = names;
-        ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, listViewContents);
-        listViewContents = ListOperations.checkForNullSafety(listViewContents);
-        Collections.sort(listViewContents);
-        unsyncStatusList.setAdapter(mArrayAdapter);
-        unsyncStatusList.setChoiceMode(unsyncStatusList.CHOICE_MODE_MULTIPLE);
+        if (names.size() > 0) {
+            ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, listViewContents);
+            listViewContents = ListOperations.checkForNullSafety(listViewContents);
+            Collections.sort(listViewContents);
+            unsyncStatusList.setAdapter(mArrayAdapter);
+            unsyncStatusList.setChoiceMode(unsyncStatusList.CHOICE_MODE_MULTIPLE);
+            unsyncStatusList.setVisibility(View.VISIBLE);
+            mPlaceholderText.setVisibility(View.GONE);
+        } else {
+            mPlaceholderText.setVisibility(View.VISIBLE);
+            unsyncStatusList.setVisibility(View.GONE);
+        }
+    }
+
+
+    private void initialiseClickableSpan() {
+        String spanString = "start";
+        SpannableString spannableString = new SpannableString(mPlaceholderText.getText().toString());
+
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                if (getActivity() instanceof MainActivity && ((MainActivity) getActivity()).getBar() != null) {
+                    ((MainActivity) getActivity()).getBar().setSelectedNavigationItem(1);
+                }
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+                ds.setColor(getContext().getResources().getColor(R.color.textColor));
+            }
+        };
+
+        int[] bounds = getIndexOfUrlKeywords(spanString, mPlaceholderText.getText().toString());
+        if (bounds != null && bounds[0] > 0) {
+            spannableString.setSpan(clickableSpan, bounds[0], bounds[1], SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        mPlaceholderText.setText(spannableString);
+        mPlaceholderText.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private int[] getIndexOfUrlKeywords(String keyword, String containingString) {
+        int[] index = new int[2];
+        index[0] = containingString.indexOf(keyword);
+        index[1] = index[0] + keyword.length();
+        return index;
     }
 }

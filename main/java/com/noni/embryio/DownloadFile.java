@@ -27,9 +27,9 @@ import java.util.Iterator;
 
 public class DownloadFile extends AsyncTask<Void, Integer, String> {
     private final String TAG = this.getClass().getSimpleName();
-    private Context context;
+    private Context mContext;
     AndroidAuthSession newSession;
-    private DropboxAPI emboDBApi;
+    private DropboxAPI mEmboDBApi;
     private ArrayList<String> fileNames;
     private DropboxAPI.DropboxFileInfo mFileInfo;
     private ProgressDialog mProgressDialog;
@@ -37,10 +37,10 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
     private UpdateableFragment frag;
 
     public DownloadFile(UpdateableFragment frag, Context c, ArrayList<String> fileNames) {
-        this.context = c;
+        this.mContext = c;
         SharedPreferences prefs = c.getSharedPreferences("prefs", Context.MODE_PRIVATE);
         newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
-        emboDBApi = new DropboxAPI<>(newSession);
+        mEmboDBApi = new DropboxAPI<>(newSession);
         this.fileNames = fileNames;
         totalCount = fileNames.size();
         this.frag = frag;
@@ -52,9 +52,9 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
             for (String name : fileNames) {
                 currentCount = fileNames.indexOf(name) + 1;
                 publishProgress(totalCount, currentCount);
-                File file = new File(context.getFilesDir() + "/" + name);
+                File file = new File(mContext.getFilesDir() + "/" + name);
                 FileOutputStream mOutputStream = new FileOutputStream(file);
-                mFileInfo = emboDBApi.getFile(name, null, mOutputStream, null);
+                mFileInfo = mEmboDBApi.getFile(name, null, mOutputStream, null);
                 insertUnsyncedContacts(file);
             }
 
@@ -77,7 +77,7 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mProgressDialog = new ProgressDialog(context);
+        mProgressDialog = new ProgressDialog(mContext);
         mProgressDialog.setProgress(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.setTitle("Please wait...");
         mProgressDialog.setMessage("Downloading contacts now.");
@@ -302,7 +302,7 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
 
             try {
                 if (Ops != null) {
-                    ContentProviderResult[] result = context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, Ops);
+                    ContentProviderResult[] result = mContext.getContentResolver().applyBatch(ContactsContract.AUTHORITY, Ops);
                     Log.v(TAG, "Content provider result is " + result[0]);
                 }
             } catch (Exception e) {

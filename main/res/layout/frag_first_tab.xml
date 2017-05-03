@@ -50,14 +50,28 @@
         </Button>
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/listcontacts1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <FrameLayout
         android:layout_below="@id/buttonLayout"
-        android:paddingBottom="50dp"
-        android:background="@color/embryio">
-    </ListView>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ListView
+            android:visibility="visible"
+            android:id="@+id/listcontacts1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/embryio"
+            android:paddingBottom="50dp">
+        </ListView>
+        <TextView
+            android:id="@+id/empty_placeholder_download_contact"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="21sp"
+            android:text="@string/first_tab_retrive_contacts_placeholder"/>
+    </FrameLayout>
+
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="wrap_content"
