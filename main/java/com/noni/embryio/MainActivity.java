@@ -4,16 +4,13 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar.Tab;
-import android.support.v7.app.ActionBar.TabListener;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
 @SuppressLint("NewApi")
-public class MainActivity extends AppCompatActivity implements TabListener, OnExecutionCompletionListener {
+public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     final static String TAG = "MainActivity";
@@ -51,36 +48,8 @@ public class MainActivity extends AppCompatActivity implements TabListener, OnEx
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        int a = viewPager.getCurrentItem();
-        mAdapter.onlyUpdatedSelected(a);
-    }
-
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("currentTab", viewPager.getCurrentItem());
-    }
-
-    @Override
-    public void onExecutionCompleted(String[] names) {
-
-    }
-
-    @Override
-    public void onTabSelected(Tab tab, FragmentTransaction ft) {
-
-    }
-
-    @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-
-    }
-
-    @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-
     }
 }
