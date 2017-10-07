@@ -27,9 +27,10 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
     private final String TAG = this.getClass().getSimpleName();
     private ArrayList<String> listViewContents = new ArrayList<>();
     private ArrayList<String> allPhoneContacts, unsyncedphoneContacts;
-    private Button selectall, deselectall, downloadContacts;
+    private Button mSelectAllButton, mDeselectallButton, mDownloadContactsButton;
     private DropboxContactsList dbContactList;
     private TextView mEmptyPlaceHolder;
+    private AdView mAdView;
 
     @Override
     public void update() {
@@ -44,22 +45,32 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.frag_first_tab, container, false);
-        MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.id_ad_first_tab));
-        AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-        syncStatusList = (ListView) rootView.findViewById(R.id.listcontacts1);
-        selectall = (Button) rootView.findViewById(R.id.selectall);
-        deselectall = (Button) rootView.findViewById(R.id.deselectall);
-        downloadContacts = (Button) rootView.findViewById(R.id.downloadContacts);
-        mEmptyPlaceHolder = (TextView) rootView.findViewById(R.id.empty_placeholder_download_contact);
-        selectall.setOnClickListener(this);
-        downloadContacts.setOnClickListener(this);
-        deselectall.setOnClickListener(this);
+        if (rootView instanceof  ViewGroup) {
+            initialiseAds((ViewGroup) rootView);
+            initialiseViews((ViewGroup)rootView);
+        }
         dbContactList = new DropboxContactsList(getActivity());
         dbContactList.mListener = this;
         dbContactList.execute();
         return rootView;
+    }
+
+    private void initialiseAds(ViewGroup rootView) {
+        mAdView = (AdView) rootView.findViewById(R.id.adView);
+        MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.id_ad_first_tab));
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+    }
+
+    private void initialiseViews(ViewGroup rootView) {
+        syncStatusList = (ListView) rootView.findViewById(R.id.listcontacts1);
+        mSelectAllButton = (Button) rootView.findViewById(R.id.selectall);
+        mDeselectallButton = (Button) rootView.findViewById(R.id.deselectall);
+        mDownloadContactsButton = (Button) rootView.findViewById(R.id.downloadContacts);
+        mEmptyPlaceHolder = (TextView) rootView.findViewById(R.id.empty_placeholder_download_contact);
+        mSelectAllButton.setOnClickListener(this);
+        mDownloadContactsButton.setOnClickListener(this);
+        mDeselectallButton.setOnClickListener(this);
     }
 
 
@@ -123,16 +134,16 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
             return;
         }
 
-            for (int i = 0; i < checked.size(); i++) {
-                int key = checked.keyAt(i);
-                boolean value = checked.get(key);
-                if (value) {
-                    Log.v(TAG, "adding " + listView.getItemAtPosition(key));
-                    selectedItemList.add((String) listView.getItemAtPosition(key));
-                }
+        for (int i = 0; i < checked.size(); i++) {
+            int key = checked.keyAt(i);
+            boolean value = checked.get(key);
+            if (value) {
+                Log.v(TAG, "adding " + listView.getItemAtPosition(key));
+                selectedItemList.add((String) listView.getItemAtPosition(key));
             }
-            DownloadFile df = new DownloadFile(this, getActivity(), selectedItemList);
-            df.execute();
+        }
+        DownloadFile df = new DownloadFile(this, getActivity(), selectedItemList);
+        df.execute();
     }
 }
 
