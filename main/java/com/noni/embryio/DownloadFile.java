@@ -59,9 +59,9 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
             }
 
         } catch (DropboxException e) {
-            Log.v(TAG, e.getMessage());
+            //swallow
         } catch (FileNotFoundException e) {
-            Log.v(TAG, e.getMessage());
+            //swallow
         }
         return null;
     }

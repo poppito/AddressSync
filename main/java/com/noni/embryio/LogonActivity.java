@@ -43,7 +43,7 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         super.onCreate(savedInstanceState);
         emboDBApi = new DropboxAPI<>(newSession);
         setContentView(R.layout.logonview);
-        MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.banner_ad_unit_id));
+        MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.id_ad_logon));
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -129,8 +129,7 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
             case R.id.logonbutton: {
                 Log.v(TAG, "logon button pressed");
                 buttonPressed = true;
-                mProgressDialog = showLogonLoader();
-                mProgressDialog.show();
+                showLogonLoader();
                 if (!isDBLinked()) {
                     Log.v(TAG, "Db unlinked eh");
                     startSessionWhenUnlinked(this);
@@ -188,14 +187,14 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         return index;
     }
 
-    public ProgressDialog showLogonLoader() {
+    public void showLogonLoader() {
         ProgressDialog mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setProgress(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.setTitle("Please wait...");
         mProgressDialog.setMessage("Logging you in..");
         mProgressDialog.setCancelable(false);
         mProgressDialog.setIndeterminate(true);
-        return mProgressDialog;
+        mProgressDialog.show();
     }
 
     public void dismissLogonLoader(ProgressDialog progressDialog) {

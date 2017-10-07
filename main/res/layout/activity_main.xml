@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id">
+            ads:adUnitId="@string/id_ad_logon">
         </com.google.android.gms.ads.AdView>
     </RelativeLayout>
 </android.support.v4.view.ViewPager>

@@ -27,7 +27,6 @@ import java.util.Collections;
 
 public class ThirdTab extends Fragment implements OnClickListener, UpdateableFragment, OnDropboxContactListReceivedListener {
 
-    public ListView embryioContacts;
     public Button selectall, deselectall, unsync;
     public ListView unsyncStatusList;
     public static final String TAG = "ThirdTab";
@@ -45,7 +44,7 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.frag_third_tab, container, false);
-        MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.banner_ad_unit_id));
+        MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.id_ad_third_tab));
         AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);

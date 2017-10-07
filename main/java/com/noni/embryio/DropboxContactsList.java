@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
@@ -13,8 +12,6 @@ import com.dropbox.client2.exception.DropboxException;
 import java.util.ArrayList;
 
 public class DropboxContactsList extends AsyncTask<Void, Void, ArrayList<String>> {
-    private String response;
-    private final String TAG = this.getClass().getSimpleName();
     private Context context;
     private AndroidAuthSession newSession;
     private DropboxAPI emboDBApi;
@@ -52,7 +49,7 @@ public class DropboxContactsList extends AsyncTask<Void, Void, ArrayList<String>
                 fileNames.add(name);
             }
         } catch (DropboxException e) {
-            Log.v(TAG, e.getMessage());
+            //swallow
         }
         return fileNames;
     }

@@ -2,7 +2,6 @@ package com.noni.embryio;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
@@ -26,7 +25,7 @@ public class LogonValidityCheck extends AsyncTask<Void, Void, String> {
             DropboxAPI.Account account = dbApi.accountInfo();
             return account.displayName;
         } catch (DropboxException e) {
-            Log.v(TAG, e.getMessage());
+            //swallow
         }
         return "";
     }

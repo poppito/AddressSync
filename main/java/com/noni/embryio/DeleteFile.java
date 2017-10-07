@@ -46,8 +46,7 @@ public class DeleteFile extends AsyncTask<Void, Integer, Void> {
                 emboDBApi.delete(name);
             }
         } catch (DropboxException e) {
-            Log.v(TAG, "Dropbox exception thrown");
-            e.printStackTrace();
+            //swallow
         }
         return null;
     }

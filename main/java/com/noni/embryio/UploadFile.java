@@ -63,15 +63,13 @@ public class UploadFile extends AsyncTask<Void, Integer, String> {
                 if (response != null) {
                     file.delete();
                 }
-                Log.v(TAG, "The uploaded file's revision number is " + response.rev.toString());
             }
 
         } catch (FileNotFoundException e) {
-            Log.v(TAG, "file not found exception thrown");
-            e.printStackTrace();
+            //swallow
         } catch (DropboxException e) {
             Log.v(TAG, "Dropbox exception thrown");
-            e.printStackTrace();
+            //swallow
         }
         return "";
     }

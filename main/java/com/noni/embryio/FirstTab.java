@@ -27,11 +27,8 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
     private final String TAG = this.getClass().getSimpleName();
     private ArrayList<String> listViewContents = new ArrayList<>();
     private ArrayList<String> allPhoneContacts, unsyncedphoneContacts;
-    private int totalContactCount;
     private Button selectall, deselectall, downloadContacts;
-    public OnDropboxContactListReceivedListener mListener;
     private DropboxContactsList dbContactList;
-    private ArrayAdapter mArrayAdapter;
     private TextView mEmptyPlaceHolder;
 
     @Override
@@ -47,7 +44,7 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.frag_first_tab, container, false);
-        MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.banner_ad_unit_id));
+        MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.id_ad_first_tab));
         AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -100,7 +97,7 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
             Collections.sort(unsyncedphoneContacts);
             ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, unsyncedphoneContacts);
             syncStatusList.setAdapter(mArrayAdapter);
-            syncStatusList.setChoiceMode(syncStatusList.CHOICE_MODE_MULTIPLE);
+            syncStatusList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
             mEmptyPlaceHolder.setVisibility(View.GONE);
             syncStatusList.setVisibility(View.VISIBLE);
         }

@@ -42,7 +42,7 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.frag_second_tab, container, false);
-        MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.banner_ad_unit_id));
+        MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.id_ad_second_tab));
         AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -68,7 +68,6 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
 
     @Override
     public void update() {
-        // TODO Auto-generated method stub
         dbContactList = new DropboxContactsList(getActivity());
         dbContactList.mListener = this;
         dbContactList.execute();
@@ -86,7 +85,6 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
 
     @Override
     public void onClick(View v) {
-        // TODO Auto-generated method stub
         switch (v.getId()) {
             case (R.id.deselectall):
                 for (int i = 0; i < listContacts.getCount(); i++) {
@@ -114,7 +112,7 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
             displayList = ListOperations.checkForNullSafety(displayList);
             Collections.sort(displayList);
             listContacts.setAdapter(mArrayAdapter);
-            listContacts.setChoiceMode(listContacts.CHOICE_MODE_MULTIPLE);
+            listContacts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
             listContacts.setVisibility(View.VISIBLE);
             mPlaceholderView.setVisibility(View.GONE);
         } else {
