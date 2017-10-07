@@ -12,6 +12,7 @@ import android.util.Log;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.session.AppKeyPair;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -39,7 +40,7 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
     public DownloadFile(UpdateableFragment frag, Context c, ArrayList<String> fileNames) {
         this.mContext = c;
         SharedPreferences prefs = c.getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
+        newSession = new AndroidAuthSession(new AppKeyPair(BuildConfig.API_KEY, BuildConfig.API_PASS), prefs.getString("emboDBAccessToken", ""));
         mEmboDBApi = new DropboxAPI<>(newSession);
         this.fileNames = fileNames;
         totalCount = fileNames.size();

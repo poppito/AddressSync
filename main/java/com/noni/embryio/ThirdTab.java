@@ -135,6 +135,12 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
         }
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden) {
+            update();
+        }
+    }
 
     private void initialiseClickableSpan() {
         String spanString = "start";

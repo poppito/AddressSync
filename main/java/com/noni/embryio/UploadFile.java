@@ -9,6 +9,7 @@ import android.util.Log;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.session.AppKeyPair;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,7 +45,7 @@ public class UploadFile extends AsyncTask<Void, Integer, String> {
     public UploadFile(UpdateableFragment frag, Context c, ArrayList<String> fileNames) {
         this.context = c;
         SharedPreferences prefs = c.getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
+        newSession = new AndroidAuthSession(new AppKeyPair(BuildConfig.API_KEY, BuildConfig.API_PASS), prefs.getString("emboDBAccessToken", ""));
         emboDBApi = new DropboxAPI<>(newSession);
         this.fileNames = fileNames;
         this.frag = frag;

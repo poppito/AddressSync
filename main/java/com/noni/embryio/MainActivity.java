@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = (TabLayout) findViewById(R.id.pager_tabs);
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), getFragments());
         viewPager.setAdapter(mAdapter);
+        viewPager.setOffscreenPageLimit(0);
         tabs.setupWithViewPager(viewPager);
         initialiseTabs(tabs);
     }

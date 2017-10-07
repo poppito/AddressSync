@@ -27,7 +27,6 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
     private final String TAG = this.getClass().getSimpleName();
     private ArrayList<String> listViewContents = new ArrayList<>();
     private ArrayList<String> allPhoneContacts, unsyncedphoneContacts;
-    private Button mSelectAllButton, mDeselectallButton, mDownloadContactsButton;
     private DropboxContactsList dbContactList;
     private TextView mEmptyPlaceHolder;
     private AdView mAdView;
@@ -38,6 +37,14 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
             dbContactList = new DropboxContactsList(getActivity());
             dbContactList.mListener = this;
             dbContactList.execute();
+        }
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden) {
+            update();
         }
     }
 
@@ -64,9 +71,9 @@ public class FirstTab extends Fragment implements OnClickListener, UpdateableFra
 
     private void initialiseViews(ViewGroup rootView) {
         syncStatusList = (ListView) rootView.findViewById(R.id.listcontacts1);
-        mSelectAllButton = (Button) rootView.findViewById(R.id.selectall);
-        mDeselectallButton = (Button) rootView.findViewById(R.id.deselectall);
-        mDownloadContactsButton = (Button) rootView.findViewById(R.id.downloadContacts);
+        Button mSelectAllButton = (Button) rootView.findViewById(R.id.selectall);
+        Button mDeselectallButton = (Button) rootView.findViewById(R.id.deselectall);
+        Button mDownloadContactsButton = (Button) rootView.findViewById(R.id.downloadContacts);
         mEmptyPlaceHolder = (TextView) rootView.findViewById(R.id.empty_placeholder_download_contact);
         mSelectAllButton.setOnClickListener(this);
         mDownloadContactsButton.setOnClickListener(this);

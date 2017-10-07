@@ -59,6 +59,12 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
         return rootView;
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden) {
+            update();
+        }
+    }
 
     @Override
     public void onStart() {

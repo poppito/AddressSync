@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.session.AppKeyPair;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public class DropboxContactsList extends AsyncTask<Void, Void, ArrayList<String>
 
     public DropboxContactsList(Context context) {
         SharedPreferences prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
+        newSession = new AndroidAuthSession(new AppKeyPair(BuildConfig.API_KEY, BuildConfig.API_PASS), prefs.getString("emboDBAccessToken", ""));
         emboDBApi = new DropboxAPI<>(newSession);
         this.context = context;
     }

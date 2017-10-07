@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.session.AppKeyPair;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -30,15 +31,16 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
     private SharedPreferences prefs;
     private final String TAG = this.getClass().getSimpleName();
     private DropboxAPI<AndroidAuthSession> emboDBApi;
-    private AndroidAuthSession newSession = new AndroidAuthSession(Constants.KEY_PAIR);
+    private AppKeyPair mAppKey = new AppKeyPair(BuildConfig.API_KEY , BuildConfig.API_PASS);
+    private AndroidAuthSession newSession = new AndroidAuthSession(mAppKey);
     private Boolean buttonPressed = false;
     private ProgressDialog mProgressDialog;
 
 
     protected void onCreate(Bundle savedInstanceState) {
-        String termsURL = Constants.TERMS_URL;
-        String whyDropboxURL = Constants.WHY_DROPBOX_URL;
-        String privacyPolicyURL = Constants.PRIVACY_POLICY_URL;
+        String termsURL = BuildConfig.TERMS_URL;
+        String whyDropboxURL = BuildConfig.WHY_DROPBOX_URL;
+        String privacyPolicyURL = BuildConfig.PRIVACY_POLICY_URL;
         final String licenseSpan = "License Terms";
         super.onCreate(savedInstanceState);
         emboDBApi = new DropboxAPI<>(newSession);
@@ -47,8 +49,6 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
         Button logonButton = (Button) findViewById(R.id.logonbutton);
         TextView whyDropboxView = (TextView) findViewById(R.id.explainWhy);
         initialiseClickableSpan(this, whyDropboxView, whyDropboxURL, getResources().getString(R.string.whyDropbox));
@@ -164,7 +164,7 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         if (!tokenExists()) {
             return false;
         }
-        AndroidAuthSession newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
+        AndroidAuthSession newSession = new AndroidAuthSession(mAppKey, prefs.getString("emboDBAccessToken", ""));
         emboDBApi = new DropboxAPI<>(newSession);
         LogonValidityCheck va = new LogonValidityCheck(emboDBApi, this);
         try {
