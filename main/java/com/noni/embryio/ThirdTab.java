@@ -143,9 +143,6 @@ public class ThirdTab extends Fragment implements OnClickListener, UpdateableFra
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                if (getActivity() instanceof MainActivity && ((MainActivity) getActivity()).getBar() != null) {
-                    ((MainActivity) getActivity()).getBar().setSelectedNavigationItem(1);
-                }
             }
 
             @Override

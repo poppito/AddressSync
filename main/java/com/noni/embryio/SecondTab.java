@@ -30,7 +30,6 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
     private ArrayList<String> displayList = new ArrayList<>();
     private ArrayList<String> allPhoneContacts = new ArrayList<>();
     private ArrayList<String> syncedContacts = new ArrayList<>();
-    private final static int TIMEOUT_MILLSEC = 1000;
     private DropboxContactsList dbContactList;
     private ArrayAdapter<String> mArrayAdapter;
     private TextView mPlaceholderView;

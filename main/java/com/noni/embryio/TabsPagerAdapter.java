@@ -5,17 +5,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
-    public FragmentManager fm;
     public final String TAG = "TabsPagerAdapter";
-    public Fragment FT = new FirstTab();
-    public Fragment ST = new SecondTab();
-    public Fragment TT = new ThirdTab();
+
+    private ArrayList<Fragment> mFragments;
 
 
-    public TabsPagerAdapter(FragmentManager fm) {
+    public TabsPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
         super(fm);
+        mFragments = (ArrayList<Fragment>) fragments;
     }
 
     public void onlyUpdatedSelected(int position) {
@@ -28,22 +30,16 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int index) {
-        // TODO Auto-generated method stub
-        switch (index) {
-            case 0:
-                return FT;
-            case 1:
-                return ST;
-            case 2:
-                return TT;
-        }
-        return null;
+        return mFragments.get(index);
     }
 
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
-        return 3;
+        if (mFragments != null) {
+            return mFragments.size();
+        } else {
+            return 0;
+        }
     }
 
 
