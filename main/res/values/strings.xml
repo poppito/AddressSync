@@ -67,4 +67,14 @@
     <string name="txt_title_tab1">Download contacts</string>
     <string name="txt_title_tab2">Upload contacts</string>
     <string name="txt_title_tab3">Delete contacts</string>
+
+    <!---Main activity auth dialog -->
+    <string name="title_db_auth_dialog">Dropbox Authorisation</string>
+    <string name="body_db_auth_dialog">You will be asked to authorise Address syncapp to use your dropbox. Once complete, please enter the code in the box below to logon</string>
+    <string name="btn_ok_db_auth_dialog">Ok</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+
+    <!---Webview Auth Activity -->
+    <string name="et_auth_hint">Authorisation Code</string>
+    <string name="txt_auth_btn">Authorise</string>
 </resources>
