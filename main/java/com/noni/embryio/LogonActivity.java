@@ -13,30 +13,36 @@ import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.dropbox.core.DbxAppInfo;
+import com.dropbox.core.DbxAuthFinish;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.DbxWebAuth;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 public class LogonActivity extends AppCompatActivity implements OnClickListener {
 
-    private SharedPreferences mPrefs;
-    private final String TAG = this.getClass().getSimpleName();
     private Boolean buttonPressed = false;
+
+    private SharedPreferences mPrefs;
     private ProgressDialog mProgressDialog;
 
     public static final String EXTRA_AUTH_URL = "authurl";
     public static final int REQUEST_AUTH = 10001;
-    private String mAuthCode;
+
+    private DbxWebAuth mWebAuth;
+    private DbxAuthFinish mAuthFinish;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,12 +96,12 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
     private String getAuthUrl() {
         DbxAppInfo appInfo = new DbxAppInfo(BuildConfig.API_KEY, BuildConfig.API_PASS);
         DbxRequestConfig config = new DbxRequestConfig(BuildConfig.CLIENT_ID);
-        DbxWebAuth auth = new DbxWebAuth(config, appInfo);
+        mWebAuth = new DbxWebAuth(config, appInfo);
         DbxWebAuth.Request request = DbxWebAuth.newRequestBuilder()
                 .withDisableSignup(true)
                 .withNoRedirect()
                 .build();
-        return auth.authorize(request);
+        return mWebAuth.authorize(request);
     }
 
     private void showAuthDialog() {
@@ -141,7 +147,6 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.logonbutton: {
-                Log.v(TAG, "logon button pressed");
                 buttonPressed = true;
                 //show dialog
                 showAuthDialog();
@@ -151,16 +156,10 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
 
     public boolean tokenExists() {
         if (mPrefs.getString("emboDBAccessToken", "").equals("")) {
-            Log.v(TAG, "Nah token don't exist bruv");
             return false;
         } else {
-            Log.v(TAG, "Yah token exists");
             return true;
         }
-    }
-
-    public void startSessionWhenUnlinked(Context context) {
-
     }
 
     public boolean isDBLinked() {
@@ -178,15 +177,6 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         return index;
     }
 
-    public void showLogonLoader() {
-        ProgressDialog mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setProgress(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setTitle("Please wait...");
-        mProgressDialog.setMessage("Logging you in..");
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.show();
-    }
 
     public void dismissLogonLoader(ProgressDialog progressDialog) {
         if (progressDialog != null) {
@@ -194,17 +184,26 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_AUTH) {
             if (resultCode == RESULT_OK) {
-                mAuthCode = data.getStringExtra(WebViewActivity.AUTH_CODE_WEBVIEW);
+                String authCode = data.getStringExtra(WebViewActivity.AUTH_CODE_WEBVIEW);
+                runDbxAuth(authCode);
             }
         }
     }
+
+    private void runDbxAuth(final String authCode) {
+        if (authCode != null) {
+            ExecutorService es = Executors.newFixedThreadPool(1);
+            es.submit(new Callable<DbxAuthFinish>() {
+                @Override
+                public DbxAuthFinish call() throws Exception {
+                    mAuthFinish = mWebAuth.finishFromCode(authCode);
+                    return mAuthFinish;
+                }
+            });
+        }
+    }
 }
-
-
-
-
