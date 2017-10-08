@@ -9,32 +9,50 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_auth_activity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
     </android.support.v7.widget.Toolbar>
+
+    <FrameLayout
+        android:id="@+id/view_webview_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_auth_activity">
+
+        <WebView
+            android:id="@+id/view_webview_auth"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+        </WebView>
+
+        <ProgressBar
+            android:id="@+id/auth_progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
     <LinearLayout
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:weightSum="2">
+        android:layout_alignParentBottom="true"
+        android:background="@color/primary"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <EditText
+            android:gravity="center_horizontal"
             android:id="@+id/et_auth_code"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:hint="@string/et_auth_hint"/>
 
         <Button
+            android:enabled="false"
             android:id="@+id/btn_ok"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_auth_btn"/>
     </LinearLayout>
-    <WebView
-        android:paddingTop="60dp"
-        android:layout_alignParentTop="true"
-        android:id="@+id/view_webview_auth"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </WebView>
 </RelativeLayout>

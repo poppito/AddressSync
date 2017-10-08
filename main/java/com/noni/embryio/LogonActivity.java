@@ -36,6 +36,7 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
 
     public static final String EXTRA_AUTH_URL = "authurl";
     public static final int REQUEST_AUTH = 10001;
+    private String mAuthCode;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,6 +191,16 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
     public void dismissLogonLoader(ProgressDialog progressDialog) {
         if (progressDialog != null) {
             progressDialog.dismiss();
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_AUTH) {
+            if (resultCode == RESULT_OK) {
+                mAuthCode = data.getStringExtra(WebViewActivity.AUTH_CODE_WEBVIEW);
+            }
         }
     }
 }

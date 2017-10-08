@@ -75,6 +75,6 @@
     <string name="title_activity_web_view">WebViewActivity</string>
 
     <!---Webview Auth Activity -->
-    <string name="et_auth_hint">Authorisation Code</string>
+    <string name="et_auth_hint">Enter Authorisation Code here</string>
     <string name="txt_auth_btn">Authorise</string>
 </resources>
