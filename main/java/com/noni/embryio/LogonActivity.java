@@ -1,6 +1,5 @@
 package com.noni.embryio;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,29 +19,35 @@ import android.widget.TextView;
 
 import com.dropbox.core.DbxAppInfo;
 import com.dropbox.core.DbxAuthFinish;
+import com.dropbox.core.DbxAuthInfo;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.DbxWebAuth;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 
 public class LogonActivity extends AppCompatActivity implements OnClickListener {
 
-    private Boolean buttonPressed = false;
-
     private SharedPreferences mPrefs;
-    private ProgressDialog mProgressDialog;
 
     public static final String EXTRA_AUTH_URL = "authurl";
     public static final int REQUEST_AUTH = 10001;
 
     private DbxWebAuth mWebAuth;
     private DbxAuthFinish mAuthFinish;
+
+    private static final String ACCESS_TOKEN = "emboDBAccessToken";
+
+    private DbxAppInfo mAppInfo = new DbxAppInfo(BuildConfig.API_KEY, BuildConfig.API_PASS);
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,9 +99,8 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
 
 
     private String getAuthUrl() {
-        DbxAppInfo appInfo = new DbxAppInfo(BuildConfig.API_KEY, BuildConfig.API_PASS);
         DbxRequestConfig config = new DbxRequestConfig(BuildConfig.CLIENT_ID);
-        mWebAuth = new DbxWebAuth(config, appInfo);
+        mWebAuth = new DbxWebAuth(config, mAppInfo);
         DbxWebAuth.Request request = DbxWebAuth.newRequestBuilder()
                 .withDisableSignup(true)
                 .withNoRedirect()
@@ -133,12 +137,6 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-
-    @Override
     public void onBackPressed() {
         finish();
     }
@@ -147,26 +145,13 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.logonbutton: {
-                buttonPressed = true;
-                //show dialog
-                showAuthDialog();
+                if (!verifyAuthorisation()) {
+                    showAuthDialog();
+                } else {
+                    startActivity(new Intent(this, MainActivity.class));
+                }
             }
         }
-    }
-
-    public boolean tokenExists() {
-        if (mPrefs.getString("emboDBAccessToken", "").equals("")) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public boolean isDBLinked() {
-        if (!tokenExists()) {
-            return false;
-        }
-        return false;
     }
 
 
@@ -177,12 +162,6 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         return index;
     }
 
-
-    public void dismissLogonLoader(ProgressDialog progressDialog) {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -197,13 +176,57 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
     private void runDbxAuth(final String authCode) {
         if (authCode != null) {
             ExecutorService es = Executors.newFixedThreadPool(1);
-            es.submit(new Callable<DbxAuthFinish>() {
+            Callable<DbxAuthFinish> callable = new Callable<DbxAuthFinish>() {
                 @Override
                 public DbxAuthFinish call() throws Exception {
                     mAuthFinish = mWebAuth.finishFromCode(authCode);
                     return mAuthFinish;
                 }
-            });
+            };
+            FutureTask<DbxAuthFinish> task = new FutureTask<>(callable);
+            es.submit(task);
+            try {
+                storeAccessToken(task.get().getAccessToken());
+            } catch (InterruptedException | ExecutionException e) {
+                //swallow;
+            }
         }
+    }
+
+    private boolean verifyAuthorisation() {
+        ExecutorService service = Executors.newFixedThreadPool(1);
+        Callable<Boolean> callable = new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+               return verifyAuth();
+            }
+        };
+        try {
+            FutureTask<Boolean> task = new FutureTask<>(callable);
+            service.submit(task);
+            return task.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return false;
+        }
+    }
+
+    private boolean verifyAuth() {
+        if (mPrefs.getString(ACCESS_TOKEN, null) != null) {
+            try {
+                String token = mPrefs.getString(ACCESS_TOKEN, "");
+                DbxAuthInfo info = new DbxAuthInfo(token, mAppInfo.getHost());
+                DbxAuthInfo.Writer.writeToFile(info, new File("testerson"));
+                return true;
+            } catch (IOException exception) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    private void storeAccessToken(String token) {
+        mPrefs.edit().putString(ACCESS_TOKEN, token).apply();
+        startActivity(new Intent(this, MainActivity.class));
     }
 }
