@@ -19,15 +19,14 @@ import android.widget.TextView;
 
 import com.dropbox.core.DbxAppInfo;
 import com.dropbox.core.DbxAuthFinish;
-import com.dropbox.core.DbxAuthInfo;
+import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.DbxWebAuth;
+import com.dropbox.core.v2.DbxClientV2;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -44,6 +43,7 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
 
     private DbxWebAuth mWebAuth;
     private DbxAuthFinish mAuthFinish;
+    private DbxRequestConfig mConfig;
 
     private static final String ACCESS_TOKEN = "emboDBAccessToken";
 
@@ -99,8 +99,8 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
 
 
     private String getAuthUrl() {
-        DbxRequestConfig config = new DbxRequestConfig(BuildConfig.CLIENT_ID);
-        mWebAuth = new DbxWebAuth(config, mAppInfo);
+        mConfig = new DbxRequestConfig(BuildConfig.CLIENT_ID);
+        mWebAuth = new DbxWebAuth(mConfig, mAppInfo);
         DbxWebAuth.Request request = DbxWebAuth.newRequestBuilder()
                 .withDisableSignup(true)
                 .withNoRedirect()
@@ -198,7 +198,7 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         Callable<Boolean> callable = new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
-               return verifyAuth();
+                return verifyAuth();
             }
         };
         try {
@@ -214,10 +214,12 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         if (mPrefs.getString(ACCESS_TOKEN, null) != null) {
             try {
                 String token = mPrefs.getString(ACCESS_TOKEN, "");
-                DbxAuthInfo info = new DbxAuthInfo(token, mAppInfo.getHost());
-                DbxAuthInfo.Writer.writeToFile(info, new File("testerson"));
+                DbxClientV2 client = new DbxClientV2(mConfig, token);
+                if (client.users().getCurrentAccount() != null) {
+                    return true;
+                }
                 return true;
-            } catch (IOException exception) {
+            } catch (DbxException exception) {
                 return false;
             }
         } else {
