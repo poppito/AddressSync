@@ -24,7 +24,6 @@ import java.util.Collections;
 public class SecondTab extends Fragment implements OnClickListener, UpdateableFragment, OnDropboxContactListReceivedListener, OnExecutionCompletionListener {
 
     private static String TAG = "SecondTab";
-    private Button selectall, deselectall, syncme;
     private ListView listContacts;
     private ArrayList<String> selectedItemList = new ArrayList<>();
     private ArrayList<String> displayList = new ArrayList<>();
@@ -41,18 +40,14 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.frag_second_tab, container, false);
-        MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.id_ad_second_tab));
-        AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-        listContacts = (ListView) rootView.findViewById(R.id.listcontacts);
-        Button selectall = (Button) rootView.findViewById(R.id.selectall);
-        Button deselectall = (Button) rootView.findViewById(R.id.deselectall);
-        Button backupContacts = (Button) rootView.findViewById(R.id.syncme);
-        mPlaceholderView = (TextView) rootView.findViewById(R.id.empty_placeholder_send_contact);
-        selectall.setOnClickListener(this);
-        deselectall.setOnClickListener(this);
-        backupContacts.setOnClickListener(this);
+
+
+        //initialise views and ads
+        if (rootView instanceof ViewGroup) {
+            initialiseViews((ViewGroup) rootView);
+            initialiseAds((ViewGroup) rootView);
+        }
+
         dbContactList = new DropboxContactsList(getActivity());
         dbContactList.mListener = this;
         dbContactList.execute();
@@ -66,9 +61,22 @@ public class SecondTab extends Fragment implements OnClickListener, UpdateableFr
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    private void initialiseAds(ViewGroup rootView) {
+        MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.id_ad_second_tab));
+        AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+    }
+
+    private void initialiseViews(ViewGroup rootView) {
+        Button selectall = (Button) rootView.findViewById(R.id.selectall);
+        Button deselectall = (Button) rootView.findViewById(R.id.deselectall);
+        Button backupContacts = (Button) rootView.findViewById(R.id.syncme);
+        mPlaceholderView = (TextView) rootView.findViewById(R.id.empty_placeholder_send_contact);
+        selectall.setOnClickListener(this);
+        deselectall.setOnClickListener(this);
+        backupContacts.setOnClickListener(this);
+        listContacts = (ListView) rootView.findViewById(R.id.listcontacts);
     }
 
     @Override

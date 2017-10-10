@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
+import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.v2.DbxClientV2;
+
 import java.util.ArrayList;
 
 public class DropboxContactsList extends AsyncTask<Void, Void, ArrayList<String>> {
@@ -12,9 +15,10 @@ public class DropboxContactsList extends AsyncTask<Void, Void, ArrayList<String>
     private ArrayList<String> fileNames;
     public OnDropboxContactListReceivedListener mListener = null;
     private ProgressDialog mProgressDialog;
+    private SharedPreferences mPrefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
+    private DbxRequestConfig mConfig = new DbxRequestConfig(BuildConfig.CLIENT_ID);
 
     public DropboxContactsList(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
         this.context = context;
     }
 
@@ -32,6 +36,8 @@ public class DropboxContactsList extends AsyncTask<Void, Void, ArrayList<String>
 
     @Override
     protected ArrayList<String> doInBackground(Void... params) {
+        String token = mPrefs.getString(LogonActivity.ACCESS_TOKEN, "");
+        DbxClientV2 client = new DbxClientV2(mConfig, token);
         fileNames = new ArrayList<>();
         return fileNames;
     }
