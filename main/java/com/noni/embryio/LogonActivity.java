@@ -43,7 +43,7 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
 
     private DbxWebAuth mWebAuth;
     private DbxAuthFinish mAuthFinish;
-    private DbxRequestConfig mConfig;
+    private DbxRequestConfig mConfig = new DbxRequestConfig(BuildConfig.CLIENT_ID);
 
     public static final String ACCESS_TOKEN = "emboDBAccessToken";
     public static final String PREFS = "mPrefs";
@@ -76,7 +76,6 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
 
 
     private String getAuthUrl() {
-        mConfig = new DbxRequestConfig(BuildConfig.CLIENT_ID);
         mWebAuth = new DbxWebAuth(mConfig, mAppInfo);
         DbxWebAuth.Request request = DbxWebAuth.newRequestBuilder()
                 .withDisableSignup(true)
@@ -147,10 +146,7 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
             try {
                 String token = mPrefs.getString(ACCESS_TOKEN, "");
                 DbxClientV2 client = new DbxClientV2(mConfig, token);
-                if (client.users().getCurrentAccount() != null) {
-                    return true;
-                }
-                return true;
+                return client.users().getCurrentAccount() != null;
             } catch (DbxException exception) {
                 return false;
             }
