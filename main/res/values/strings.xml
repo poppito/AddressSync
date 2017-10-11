@@ -5,38 +5,37 @@
     <string name="First">First</string>
     <string name="notathing">Nothing to see here, not a thing!</string>
     <color name="background">#ffffff</color>
-        <string name="action_settings">Settings</string>
+    <string name="action_settings">Settings</string>
     <string name="submit"> submit </string>
-     <string name="contactname">Contact Name</string>
-     <string name="contactnumber">Contact Number</string>
-      <string name="syncme">Sync selected items</string>
-      <string name="selectall">select all</string>
-      <string name="sync">sync</string>
-      <string name="deselectall">De-select all</string>
-      <string name="username">Username</string>
-     <string name="password">Password</string>
-     <string name="logonbutton">Login with Dropbox</string>
-     <string name="rememberpref">Remember logon</string>
-     <string name="submitbutton">Create</string>
-     <string name="emailaddress">Email</string>
-     <color name="embryio">#00AAEF</color>
-     <string name="logon">Register. Logon. Sync.                                 </string>
-     <color name="bg">#003399</color>
+    <string name="contactname">Contact Name</string>
+    <string name="contactnumber">Contact Number</string>
+    <string name="syncme">Sync selected items</string>
+    <string name="selectall">select all</string>
+    <string name="sync">sync</string>
+    <string name="deselectall">De-select all</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="logonbutton">Login with Dropbox</string>
+    <string name="rememberpref">Remember logon</string>
+    <string name="submitbutton">Create</string>
+    <string name="emailaddress">Email</string>
+    <color name="embryio">#00AAEF</color>
+    <color name="bg">#003399</color>
     <color name="darkPrimary">#0288D1</color>
     <color name="primary">#03A9F4</color>
     <color name="textColor">#212121</color>
     <color name="colorAccent">#FFEB3B</color>
-     <color name="titletextcolour">#9f56a6</color>
-     <string name="first_tab_retrive_contacts_placeholder">Woohoo! No unsynced contacts to download, go you!</string>
-     <string name="second_tab_send_contacts_placeholder">Woohoo! No local phone contacts to send, great job!</string>
+    <color name="titletextcolour">#9f56a6</color>
+    <string name="first_tab_retrive_contacts_placeholder">Woohoo! No unsynced contacts to download, go you!</string>
+    <string name="second_tab_send_contacts_placeholder">Woohoo! No local phone contacts to send, great job!</string>
     <string name="third_tab_delete_contacts_placeholder">Woohoo! Nothing to delete on the server. Perhaps you can start by sending some contacts to the cloud?</string>
-     <string name="logonstatus"></string>
-     <color name="white">#ffffff</color>
-     <string name="updatesavailable"></string>
-     <string name="unsyncme">unsync selected items</string>
-     <string name="register_status"></string>
-     <string name="progressbar"/>
-         <dimen name="iconSize">48dp</dimen>
+    <string name="logonstatus"></string>
+    <color name="white">#ffffff</color>
+    <string name="updatesavailable"></string>
+    <string name="unsyncme">unsync selected items</string>
+    <string name="register_status"></string>
+    <string name="progressbar"/>
+    <dimen name="iconSize">48dp</dimen>
     <dimen name="tvSizeFull">58dp</dimen>
     <dimen name="tvSizeHalf">29dp</dimen>
     <dimen name="tvHeight">48dp</dimen>
@@ -62,4 +61,20 @@
     <string name="noContentToDownload">Nothing to download.</string>
     <string name="nothingToDelete">Nothing to delete.</string>
     <string name="privacyPolicy">Privacy Policy</string>
+
+
+    <!-- Main Activity Tab names -->
+    <string name="txt_title_tab1">Download contacts</string>
+    <string name="txt_title_tab2">Upload contacts</string>
+    <string name="txt_title_tab3">Delete contacts</string>
+
+    <!---Main activity auth dialog -->
+    <string name="title_db_auth_dialog">Dropbox Authorisation</string>
+    <string name="body_db_auth_dialog">You will be asked to authorise Address syncapp to use your dropbox. Once complete, please enter the code in the box below to logon</string>
+    <string name="btn_ok_db_auth_dialog">Ok</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+
+    <!---Webview Auth Activity -->
+    <string name="et_auth_hint">Enter Authorisation Code here</string>
+    <string name="txt_auth_btn">Authorise</string>
 </resources>

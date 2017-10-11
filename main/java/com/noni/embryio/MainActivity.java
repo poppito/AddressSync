@@ -1,22 +1,18 @@
 package com.noni.embryio;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.Tab;
-import android.support.v7.app.ActionBar.TabListener;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
+
+import java.util.ArrayList;
 
 @SuppressLint("NewApi")
-public class MainActivity extends AppCompatActivity implements TabListener, OnPageChangeListener, OnExecutionCompletionListener {
+public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
-    private int[] Tabs = { R.drawable.ic_actionbar_tab_download, R.drawable.ic_actionbar_tab_upload, R.drawable.ic_actionbar_tab_delete };
-    private android.support.v7.app.ActionBar mActionBar;
     final static String TAG = "MainActivity";
 
     @Override
@@ -24,85 +20,37 @@ public class MainActivity extends AppCompatActivity implements TabListener, OnPa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         viewPager = (ViewPager) findViewById(R.id.pager);
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        TabLayout tabs = (TabLayout) findViewById(R.id.pager_tabs);
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), getFragments());
         viewPager.setAdapter(mAdapter);
-        mActionBar = getSupportActionBar();
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        mActionBar.setDisplayShowHomeEnabled(false);
-        mActionBar.setDisplayShowTitleEnabled(false);
-        for (int tab_name : Tabs) {
-            mActionBar.addTab(mActionBar.newTab().setIcon(tab_name).setTabListener(this));
+        viewPager.setOffscreenPageLimit(0);
+        tabs.setupWithViewPager(viewPager);
+        initialiseTabs(tabs);
+    }
+
+    private ArrayList<Fragment> getFragments() {
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments.add(new FirstTab());
+        fragments.add(new SecondTab());
+        fragments.add(new ThirdTab());
+        return fragments;
+    }
+
+    private void initialiseTabs(TabLayout tabs) {
+        if (tabs.getTabAt(0) != null) {
+            tabs.getTabAt(0).setText(getString(R.string.txt_title_tab1));
         }
-        viewPager.setOnPageChangeListener(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int position) {
-        // TODO Auto-generated method stub
-
-    }
-
-
-    @Override
-    public void onPageScrolled(int arg0, float arg1, int arg2) {
-        // TODO Auto-generated method stub
-    }
-
-
-    @Override
-    public void onPageSelected(int position) {
-        // TODO Auto-generated method stub
-        Log.e(TAG, "hey, this is the current Fragment " + viewPager.getCurrentItem());
-        mAdapter.onlyUpdatedSelected(viewPager.getCurrentItem());
-        //Log.e(TAG, "ViewPager has " + viewPager.getCurrentItem());
-        mActionBar.setSelectedNavigationItem(position);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Integer a = viewPager.getCurrentItem();
-        Log.e(TAG, "a is " + a);
-        if (a != null) {
-            mAdapter.onlyUpdatedSelected(a);
+        if (tabs.getTabAt(1) != null) {
+            tabs.getTabAt(1).setText(getString(R.string.txt_title_tab2));
+        }
+        if (tabs.getTabAt(2) != null) {
+            tabs.getTabAt(2).setText(getString(R.string.txt_title_tab3));
         }
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("currentTab", viewPager.getCurrentItem());
-    }
-
-    @Override
-    public void onExecutionCompleted(String[] names) {
-
-    }
-
-    @Override
-    public void onTabSelected(Tab tab, android.support.v4.app.FragmentTransaction ft) {
-        viewPager.setCurrentItem(tab.getPosition());
-        mActionBar.setSelectedNavigationItem(tab.getPosition());
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onTabUnselected(Tab tab, android.support.v4.app.FragmentTransaction ft) {
-    }
-
-    @Override
-    public void onTabReselected(Tab tab, android.support.v4.app.FragmentTransaction ft) {
-    }
-
-    public ActionBar getBar() {
-        return mActionBar;
     }
 }

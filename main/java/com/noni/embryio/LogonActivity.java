@@ -1,67 +1,165 @@
 package com.noni.embryio;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.core.DbxAppInfo;
+import com.dropbox.core.DbxAuthFinish;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.DbxWebAuth;
+import com.dropbox.core.v2.DbxClientV2;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+
 
 public class LogonActivity extends AppCompatActivity implements OnClickListener {
 
-    private SharedPreferences prefs;
-    private final String TAG = this.getClass().getSimpleName();
-    private DropboxAPI<AndroidAuthSession> emboDBApi;
-    private AndroidAuthSession newSession = new AndroidAuthSession(Constants.KEY_PAIR);
-    private Boolean buttonPressed = false;
-    private ProgressDialog mProgressDialog;
+    private SharedPreferences mPrefs;
 
+    public static final String EXTRA_AUTH_URL = "authurl";
+    public static final int REQUEST_AUTH = 10001;
+
+    private DbxWebAuth mWebAuth;
+    private DbxAuthFinish mAuthFinish;
+    private DbxRequestConfig mConfig = new DbxRequestConfig(BuildConfig.CLIENT_ID);
+
+    public static final String ACCESS_TOKEN = "emboDBAccessToken";
+    public static final String PREFS = "mPrefs";
+
+    private DbxAppInfo mAppInfo = new DbxAppInfo(BuildConfig.API_KEY, BuildConfig.API_PASS);
 
     protected void onCreate(Bundle savedInstanceState) {
-        String termsURL = Constants.TERMS_URL;
-        String whyDropboxURL = Constants.WHY_DROPBOX_URL;
-        String privacyPolicyURL = Constants.PRIVACY_POLICY_URL;
-        final String licenseSpan = "License Terms";
         super.onCreate(savedInstanceState);
-        emboDBApi = new DropboxAPI<>(newSession);
         setContentView(R.layout.logonview);
-        MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.id_ad_logon));
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
-        Button logonButton = (Button) findViewById(R.id.logonbutton);
-        TextView whyDropboxView = (TextView) findViewById(R.id.explainWhy);
-        initialiseClickableSpan(this, whyDropboxView, whyDropboxURL, getResources().getString(R.string.whyDropbox));
-        TextView licenseAgreementView = (TextView) findViewById(R.id.licenseAgreement);
-        initialiseClickableSpan(this, licenseAgreementView, termsURL, licenseSpan);
-        TextView privacyPolicy = (TextView) findViewById(R.id.privacyPolicy);
-        initialiseClickableSpan(this, privacyPolicy, privacyPolicyURL, getResources().getString(R.string.privacyPolicy));
-        logonButton.setOnClickListener(this);
-        prefs = this.getSharedPreferences("prefs", MODE_PRIVATE);
+
+        //initialise sharedPres
+        mPrefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+
+        //initialise views
+        initialiseViews();
+
+        //initialise ads
+        initialiseAds();
     }
 
-    private void initialiseClickableSpan(final Context context, TextView tv, final String url, String spannedString) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_AUTH) {
+            if (resultCode == RESULT_OK) {
+                String authCode = data.getStringExtra(WebViewActivity.AUTH_CODE_WEBVIEW);
+                runDbxAuth(authCode);
+            }
+        }
+    }
 
+
+    private String getAuthUrl() {
+        mWebAuth = new DbxWebAuth(mConfig, mAppInfo);
+        DbxWebAuth.Request request = DbxWebAuth.newRequestBuilder()
+                .withDisableSignup(true)
+                .withNoRedirect()
+                .build();
+        return mWebAuth.authorize(request);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.logonbutton: {
+                if (!verifyAuthorisation()) {
+                    showAuthDialog();
+                } else {
+                    startActivity(new Intent(this, MainActivity.class));
+                }
+            }
+        }
+    }
+
+    //region auth
+
+    private void runDbxAuth(final String authCode) {
+        if (authCode != null) {
+            ExecutorService es = Executors.newFixedThreadPool(1);
+            Callable<DbxAuthFinish> callable = new Callable<DbxAuthFinish>() {
+                @Override
+                public DbxAuthFinish call() throws Exception {
+                    mAuthFinish = mWebAuth.finishFromCode(authCode);
+                    return mAuthFinish;
+                }
+            };
+            FutureTask<DbxAuthFinish> task = new FutureTask<>(callable);
+            es.submit(task);
+            try {
+                storeAccessToken(task.get().getAccessToken());
+            } catch (InterruptedException | ExecutionException e) {
+                //swallow;
+            }
+        }
+    }
+
+    private void storeAccessToken(String token) {
+        mPrefs.edit().putString(ACCESS_TOKEN, token).apply();
+        startActivity(new Intent(this, MainActivity.class));
+    }
+
+    private boolean verifyAuthorisation() {
+        ExecutorService service = Executors.newFixedThreadPool(1);
+        Callable<Boolean> callable = new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                return verifyAuth();
+            }
+        };
+        try {
+            FutureTask<Boolean> task = new FutureTask<>(callable);
+            service.submit(task);
+            return task.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return false;
+        }
+    }
+
+    private boolean verifyAuth() {
+        if (mPrefs.getString(ACCESS_TOKEN, null) != null) {
+            try {
+                String token = mPrefs.getString(ACCESS_TOKEN, "");
+                DbxClientV2 client = new DbxClientV2(mConfig, token);
+                return client.users().getCurrentAccount() != null;
+            } catch (DbxException exception) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    //endregion
+
+    //region logon things
+    private void initialiseClickableSpan(TextView tv, final String url, String spannedString) {
+        final Context context = this;
         SpannableString span = new SpannableString(tv.getText().toString());
 
         ClickableSpan clickableSpan = new ClickableSpan() {
@@ -70,6 +168,7 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 context.startActivity(browserIntent);
             }
+
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);
@@ -84,101 +183,30 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         }
         tv.setText(span);
         tv.setMovementMethod(LinkMovementMethod.getInstance());
-
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.v(TAG, "onresume called");
-        if (buttonPressed) {
-            buttonPressed = false;
-            if (emboDBApi.getSession().authenticationSuccessful()) {
-                try {
-                    emboDBApi.getSession().finishAuthentication();
-                    String accessToken = emboDBApi.getSession().getOAuth2AccessToken();
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("emboDBAccessToken", accessToken);
-                    editor.apply();
-                    Intent i = new Intent(this, MainActivity.class);
-                    startActivity(i);
-                    finish();
-                } catch (IllegalStateException e) {
-                    Log.v(TAG, "Error authenticating", e);
-                }
-            } else {
-                dismissLogonLoader(mProgressDialog);
-                Snackbar sb = Snackbar.make(findViewById(android.R.id.content), "Logon failed", Snackbar.LENGTH_SHORT);
-                sb.show();
-            }
-            if (!tokenExists()) {
-                startSessionWhenUnlinked(this);
-            }
-        }
+    private void initialiseAds() {
+        MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.id_ad_logon));
+        AdView adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
     }
 
-
-    @Override
-    public void onBackPressed() {
-        finish();
+    private void showAuthDialog() {
+        String authUrl = getAuthUrl();
+        final Intent webViewIntent = new Intent(this, WebViewActivity.class);
+        webViewIntent.putExtra(EXTRA_AUTH_URL, authUrl);
+        new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_launcher)
+                .setTitle(getResources().getString(R.string.title_db_auth_dialog))
+                .setMessage(getResources().getString(R.string.body_db_auth_dialog))
+                .setPositiveButton(getResources().getString(R.string.btn_ok_db_auth_dialog), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivityForResult(webViewIntent, REQUEST_AUTH);
+                    }
+                }).show();
     }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.logonbutton: {
-                Log.v(TAG, "logon button pressed");
-                buttonPressed = true;
-                showLogonLoader();
-                if (!isDBLinked()) {
-                    Log.v(TAG, "Db unlinked eh");
-                    startSessionWhenUnlinked(this);
-                } else {
-                    //retrieve token and build session
-                    Intent i = new Intent(this, MainActivity.class);
-                    startActivity(i);
-                    finish();
-                    Log.v(TAG, "db still linked");
-                }
-            }
-        }
-    }
-
-    public boolean tokenExists() {
-        if (prefs.getString("emboDBAccessToken", "").equals("")) {
-            Log.v(TAG, "Nah token don't exist bruv");
-            return false;
-        } else {
-            Log.v(TAG, "Yah token exists");
-            return true;
-        }
-    }
-
-    public void startSessionWhenUnlinked(Context context) {
-        emboDBApi = new DropboxAPI<>(newSession);
-        emboDBApi.getSession().startOAuth2Authentication(context);
-    }
-
-    public boolean isDBLinked() {
-        String response;
-        if (!tokenExists()) {
-            return false;
-        }
-        AndroidAuthSession newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
-        emboDBApi = new DropboxAPI<>(newSession);
-        LogonValidityCheck va = new LogonValidityCheck(emboDBApi, this);
-        try {
-            response = va.execute().get();
-            if ((response != null) && !response.equals("")) {
-                return true;
-            }
-        }
-        catch (Exception e) {
-            Log.v(TAG, e.getMessage());
-        }
-        return false;
-    }
-
 
     private int[] getIndexOfUrlKeywords(String keyword, String containingString) {
         int[] index = new int[2];
@@ -187,23 +215,17 @@ public class LogonActivity extends AppCompatActivity implements OnClickListener 
         return index;
     }
 
-    public void showLogonLoader() {
-        ProgressDialog mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setProgress(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setTitle("Please wait...");
-        mProgressDialog.setMessage("Logging you in..");
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.show();
+    private void initialiseViews() {
+        final String licenseSpan = "License Terms";
+        Button logonButton = (Button) findViewById(R.id.logonbutton);
+        TextView whyDropboxView = (TextView) findViewById(R.id.explainWhy);
+        initialiseClickableSpan(whyDropboxView, BuildConfig.WHY_DROPBOX_URL, getResources().getString(R.string.whyDropbox));
+        TextView licenseAgreementView = (TextView) findViewById(R.id.licenseAgreement);
+        initialiseClickableSpan(licenseAgreementView, BuildConfig.TERMS_URL, licenseSpan);
+        TextView privacyPolicy = (TextView) findViewById(R.id.privacyPolicy);
+        initialiseClickableSpan(privacyPolicy, BuildConfig.PRIVACY_POLICY_URL, getResources().getString(R.string.privacyPolicy));
+        logonButton.setOnClickListener(this);
     }
 
-    public void dismissLogonLoader(ProgressDialog progressDialog) {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-        }
-    }
+    //endregion
 }
-
-
-
-

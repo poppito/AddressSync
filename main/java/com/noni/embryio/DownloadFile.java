@@ -9,11 +9,6 @@ import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.exception.DropboxException;
-
-import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -21,17 +16,13 @@ import org.json.JSONTokener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class DownloadFile extends AsyncTask<Void, Integer, String> {
     private final String TAG = this.getClass().getSimpleName();
     private Context mContext;
-    AndroidAuthSession newSession;
-    private DropboxAPI mEmboDBApi;
     private ArrayList<String> fileNames;
-    private DropboxAPI.DropboxFileInfo mFileInfo;
     private ProgressDialog mProgressDialog;
     private int totalCount, currentCount;
     private UpdateableFragment frag;
@@ -39,8 +30,6 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
     public DownloadFile(UpdateableFragment frag, Context c, ArrayList<String> fileNames) {
         this.mContext = c;
         SharedPreferences prefs = c.getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        newSession = new AndroidAuthSession(Constants.KEY_PAIR, prefs.getString("emboDBAccessToken", ""));
-        mEmboDBApi = new DropboxAPI<>(newSession);
         this.fileNames = fileNames;
         totalCount = fileNames.size();
         this.frag = frag;
@@ -54,12 +43,8 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
                 publishProgress(totalCount, currentCount);
                 File file = new File(mContext.getFilesDir() + "/" + name);
                 FileOutputStream mOutputStream = new FileOutputStream(file);
-                mFileInfo = mEmboDBApi.getFile(name, null, mOutputStream, null);
                 insertUnsyncedContacts(file);
             }
-
-        } catch (DropboxException e) {
-            //swallow
         } catch (FileNotFoundException e) {
             //swallow
         }
@@ -94,8 +79,7 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
 
     private void insertUnsyncedContacts(File file) {
         try {
-            String str = FileUtils.readFileToString(file, "utf8");
-            JSONObject obj = (JSONObject) new JSONTokener(str).nextValue();
+            JSONObject obj = (JSONObject) new JSONTokener("").nextValue();
             String accountName;
             String accountType;
 
@@ -313,8 +297,6 @@ public class DownloadFile extends AsyncTask<Void, Integer, String> {
 
         } catch (JSONException e) {
             Log.v(TAG, "json exception thrown" + e.getMessage());
-        } catch (IOException e) {
-            Log.v(TAG, "io exception thrown " + e.getMessage());
         }
     }
 
